@@ -25,4 +25,13 @@ public class StudentDaoImpl implements StudentDao {
 		return students.values();
 	}
 
+	@Override
+	public void add(Student student ) {
+		long id = students.keySet().stream().count();
+		id++;
+		student.setId(id);
+		students.put(id, student);
+
+	}
+
 }

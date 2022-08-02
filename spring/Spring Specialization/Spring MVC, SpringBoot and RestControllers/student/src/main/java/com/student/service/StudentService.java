@@ -34,4 +34,11 @@ public interface StudentService {
 	 * @return The students that belong to specific department and their name returns a String
 	 */
 	public Collection<Student> getAllStudentsInDepartments(String departmentName, String lastNameLike );
+
+	/**
+	 * Add a student to database by validating the data and then passing the data to the StudentDao
+	 * 
+	 * @param student The student instnace being inserted into the database
+	 */
+	public void addStudent(Student student );
 }

@@ -56,6 +56,18 @@ public class StudentServiceImpl implements StudentService {
 				.toList();
 		
 		return students;
+	} 
+
+	@Override
+	public void addStudent(Student student ){
+		if ( student.getFirstName().isBlank() == false &&
+		     student.getSurname().isBlank()   == false &&
+			 student.getDept().isBlank()      == false  ) {
+			studentDao.add(student);
+		}
 	}
+
+
+
 
 }
