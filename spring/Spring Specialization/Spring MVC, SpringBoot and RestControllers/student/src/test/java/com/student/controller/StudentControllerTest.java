@@ -1,20 +1,31 @@
 package com.student.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.web.client.RestTemplate;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.student.core.Student;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class StudentControllerTest {
 
     /**
      * Spring MVC Test instance
      */
-    private MockMvc mockMvc;
+    //private MockMvc mockMvc;
     
     /**
      * A routine that creates a minimal MVC environment ( Dispatcher Server etc.. )

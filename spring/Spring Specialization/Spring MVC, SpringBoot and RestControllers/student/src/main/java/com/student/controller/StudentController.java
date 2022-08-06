@@ -93,13 +93,14 @@ public class StudentController {
 	public ResponseEntity<String> addStudent(@RequestBody Student student ) {
         studentService.addStudent(student);
         if ( student.getId() > 0 ) {
-            URI uri = URI.create("/college/student" + student.getId());
+            URI uri = URI.create("localhost:8081/college/student/" + student.getId());
+            System.out.println("Charles Stockman : " + uri.toString());
             return ResponseEntity.accepted().location(uri).build();
         } else 
             return ResponseEntity.badRequest().build();
     }
 
-    RedirectView home() {
-        return new RedirectView("college/student/msg2");
-    } 
+    //RedirectView home() {
+    //    return new RedirectView("college/student/msg2");
+    //} 
 }
