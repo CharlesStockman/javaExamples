@@ -1,6 +1,15 @@
 package com.student.core;
 
- 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+// @JsonInclude -- Serialized. Without annotation property values are always included, 
+// but by using this annotation one can specify simple exclusion rules to reduce amount 
+// of properties to write out.
+// @XmlRootElement -- Maps clases/enums to xml
+@JsonInclude
+@XmlRootElement
 public class Student {
   /*
    * TABLE STUDENT

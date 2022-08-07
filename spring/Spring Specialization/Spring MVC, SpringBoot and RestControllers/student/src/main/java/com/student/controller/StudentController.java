@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +80,7 @@ public class StudentController {
         return studentService.get(id);
     }
 
-    @GetMapping("/single")
+    @GetMapping(path="/single", produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public Student getSingleStudent(@RequestParam("id") Optional<Long> optional ) {
         return studentService.get(optional.orElse(1L));
     }

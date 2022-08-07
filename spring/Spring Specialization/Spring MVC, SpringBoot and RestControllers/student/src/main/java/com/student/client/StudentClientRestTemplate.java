@@ -10,9 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import com.student.core.Student;
 
 /**
- * A client made to call the restTemplate
+ * A client that will communicate with the server using RestTemplate
  */
-public class StudentClient {
+public class StudentClientRestTemplate {
 
     /**
      * Using an Http Post Verb Add a Student
