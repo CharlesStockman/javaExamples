@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.persistence.TypedQuery;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
