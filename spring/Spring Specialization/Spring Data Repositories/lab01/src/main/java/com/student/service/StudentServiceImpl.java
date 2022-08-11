@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import com.student.core.Student;
  
@@ -27,6 +28,27 @@ public class StudentServiceImpl implements StudentService {
 		Collection<Student> students = (Collection<Student>)query.getResultList();
 		return students;
  	}
+
+	/**
+	 * Retrieves the student by department
+	 * 
+	 * When a do a major refactor I move the query code form the service to the dao.
+	 * 
+	 * @param department    The specific department where the students will be retrieved
+	 * 
+	 * @return A list of the students from the department
+	 */
+	@Override
+	public Collection<Student> getStudentsByDepartment(String department) {
+		TypedQuery query = entityManager.createQuery(
+			"select student " +
+			"from Student student " + 
+			"where student.dept = :dept", Student.class);
+
+		query.setParameter("dept", department);
+		return query.getResultList();
+	}
+
 
  
 }
