@@ -24,4 +24,12 @@ public interface StudentService {
 	 */
 	public Collection<Student> getStudentsByDepartment(String department);
 
+	/**
+	 * Returns a list of students that paid a specific fee
+	 * 
+	 * @param fee 		The fee that was paid for the class
+	 * @return A list of students who paid the fee.
+	 */
+	public  Collection<Student> getStudentsWhoPaidExactFee(double fee);
+
 }

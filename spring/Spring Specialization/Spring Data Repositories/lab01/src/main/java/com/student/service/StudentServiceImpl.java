@@ -2,18 +2,23 @@ package com.student.service;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.student.core.Student;
+import com.student.repositories.StudentRepository;
  
 @Named
 public class StudentServiceImpl implements StudentService {
  
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	@Inject
+	private StudentRepository studentRepository;
 	 
 	@Override
 	public Student get(long id) {
@@ -29,15 +34,6 @@ public class StudentServiceImpl implements StudentService {
 		return students;
  	}
 
-	/**
-	 * Retrieves the student by department
-	 * 
-	 * When a do a major refactor I move the query code form the service to the dao.
-	 * 
-	 * @param department    The specific department where the students will be retrieved
-	 * 
-	 * @return A list of the students from the department
-	 */
 	@Override
 	public Collection<Student> getStudentsByDepartment(String department) {
 		TypedQuery query = entityManager.createQuery(
@@ -48,6 +44,13 @@ public class StudentServiceImpl implements StudentService {
 		query.setParameter("dept", department);
 		return query.getResultList();
 	}
+
+	@Override
+	public Collection<Student> getStudentsWhoPaidExactFee(double fee) {
+		Collection<Student> students = studentRepository.findByFees(fee);
+		return students;
+	}
+
 
 
  

@@ -70,7 +70,9 @@ public class StudentController {
 		return studentsByDepartment;
 	}
 
-	
- 
-	 
+	@GetMapping(path="/search/cost/{fee}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Collection<Student> getStudentsByFee(@PathVariable("fee") double fee) {
+		Collection<Student> studentsByFees = studentService.getStudentsWhoPaidExactFee(fee);
+		return studentsByFees;
+	}
 }
