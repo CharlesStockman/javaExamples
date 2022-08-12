@@ -24,4 +24,10 @@ public interface StudentService {
 	 */
 	public Collection<Student> getStudentsByDepartment(String department);
 
+	/**
+	 * Returns a list classes where the fee is the same or less then the fee the studnet is paying.
+	 * 
+	 * @parm		fee 	The
+	 */
+
 }
