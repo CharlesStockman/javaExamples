@@ -1,12 +1,21 @@
 package com.student.core;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Student {
   /*
    * TABLE STUDENT
@@ -32,6 +41,9 @@ public class Student {
 	private String dept;
 	@Column(name="FEES")
 	private Double fees;
+	@JsonManagedReference
+	@OneToMany(mappedBy="student", orphanRemoval=true, cascade = CascadeType.ALL)
+	private Collection<Course> courses = new ArrayList<Course>();
 
 	
 	public Student() {
@@ -80,5 +92,14 @@ public class Student {
 				+ fees + "]";
 	}
 	
-	
+	/*
+	 * Methods to interact with Collection of Courses
+	 */
+	public Collection<Course> getCourses() {
+		return courses;
+	}
+	public void add(Course course) {
+		courses.add(course);
+	}
+
 }
