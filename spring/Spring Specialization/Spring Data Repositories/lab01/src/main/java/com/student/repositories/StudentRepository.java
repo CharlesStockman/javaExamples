@@ -12,7 +12,7 @@ import com.student.core.Student;
 /**
  * Create a repository for  
  */
-@RepositoryRestResource(collectionResourceRel="student", path="enrollments")
+@RepositoryRestResource(collectionResourceRel="student", path="enrollments", excerptProjection = NameProjection.class)
 public interface StudentRepository extends JpaRepository<Student, Long>{
 
     /**
