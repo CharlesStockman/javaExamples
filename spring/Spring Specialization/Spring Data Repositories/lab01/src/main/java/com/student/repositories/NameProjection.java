@@ -1,9 +1,14 @@
 package com.student.repositories;
 
+import org.springframework.data.rest.core.config.Projection;
+
+import com.student.core.Student;
+
 /**
  * Create a project to return the full name from the Student Table
  */
-public interface NameProjection {
+ @Projection( name = "person", types = Student.class)
+ public interface NameProjection {
 
     // First Name of the person
     public String getFirstName();
