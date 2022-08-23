@@ -22,7 +22,7 @@ public class StudentServiceImpl implements StudentService {
 	 
 	@Override
 	public Student get(long id) {
-		Student student = entityManager.find(Student.class, 1L);
+		Student student = entityManager.find(Student.class, id);
 		System.out.println(student.toString());
 		return student;
 	}
@@ -51,7 +51,8 @@ public class StudentServiceImpl implements StudentService {
 		return students;
 	}
 
-
-
- 
+	@Override
+	public void insertStudent(Student student) {
+		studentRepository.save(student);
+	} 
 }

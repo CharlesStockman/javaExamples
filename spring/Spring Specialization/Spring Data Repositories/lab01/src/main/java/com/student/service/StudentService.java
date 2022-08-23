@@ -32,4 +32,11 @@ public interface StudentService {
 	 */
 	public  Collection<Student> getStudentsWhoPaidExactFee(double fee);
 
+	/** 
+	 * Performs the instertion of a Student
+	 * 
+	 * @param student 		The Student's informatin to be added to the system
+	 */
+	public void insertStudent(Student student);
+
 }
