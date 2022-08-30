@@ -3,11 +3,15 @@ package com.student.aspect;
 import javax.inject.Named;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
+
+import com.student.core.Student;
 
 /**
  * The purpose is to put all the logging into one place.
@@ -44,5 +48,23 @@ public class StudentAspect {
    public void after(JoinPoint joinPoint) {
       LOG.info("Invoked Method after -> " + joinPoint);
    } 
+
+   /**
+    * Code that will be execute before and after the point cut
+    *
+    * @param joinPoint      -- Has a function proceed ( changes state from before to after)
+    * @param id             -- The primary key of a student in a database.
+    *
+    * @return The student the primary key from parameter id
+    * 
+    * @throws Throwable -- If the proceed throws anything
+    */
+   @Around("log() && args(id)")
+   public Object around(ProceedingJoinPoint joinPoint, long id) throws Throwable {
+      LOG.info("Around before->" + joinPoint.getSignature().getName() + " with id " + id);
+      Student student = (Student)joinPoint.proceed();
+      LOG.info("Around after->" + student.getFirstName() + " " + student.getSurname());
+      return student;
+   }
 
 }
