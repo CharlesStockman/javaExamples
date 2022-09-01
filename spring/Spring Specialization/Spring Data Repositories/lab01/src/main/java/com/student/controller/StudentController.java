@@ -8,7 +8,9 @@ import javax.inject.Inject;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.student.core.Student;
+import com.student.exception.MyException;
 import com.student.service.StudentService;
 
  
@@ -77,9 +80,20 @@ public class StudentController {
 		return studentsByFees;
 	}
 
+	// Creates a transaction when a exception is thrown then the data rolled back unless 
+	// a new transaction is create to save the data ( see the StudentRepository.java )
 	@PostMapping("/add")
-	public ResponseEntity<String> add(@RequestBody Student student  ) {
+	@Transactional(rollbackFor = MyException.class)
+	public ResponseEntity<String> add(@RequestBody Student student  ) throws MyException {
 		studentService.insertStudent(student);
+		if ( student.getFees() > 200.00 ) {
+			throw new MyException("The fee has exceeded $200");
+		}
 		return ResponseEntity.accepted().header("location", "/student/" + student.getId()).build();
+	}
+
+	@ExceptionHandler(Exception.class) 
+	public ResponseEntity<Object> handle(Exception exception) {
+		return ResponseEntity.badRequest().build();
 	}
 }
