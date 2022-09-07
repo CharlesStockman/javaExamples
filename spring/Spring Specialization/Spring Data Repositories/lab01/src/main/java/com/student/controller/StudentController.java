@@ -81,7 +81,7 @@ public class StudentController {
 	}
 
 	// Creates a transaction when a exception is thrown then the data rolled back unless 
-	// a new transaction is create to save the data ( see the StudentRepository.java )
+	// a new transaction is created to save the data ( see the StudentRepository.java )
 	@PostMapping("/add")
 	@Transactional(rollbackFor = MyException.class)
 	public ResponseEntity<String> add(@RequestBody Student student  ) throws MyException {
