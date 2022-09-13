@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import com.student.microservice.core.Student;
 
-@EnableDiso
 public interface StudentService {
 	
 	Student get(long id);
