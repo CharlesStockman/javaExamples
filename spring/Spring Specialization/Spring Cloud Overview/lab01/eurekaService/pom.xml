@@ -15,46 +15,10 @@
 	<name>microservice - Eureka Service</name>
 	<description>The component  where services are registered and discovered</description>
 
-	<properties>
-		<java.version>16</java.version>
-		<spring-cloud.version>2021.0.3</spring-cloud.version>
-	</properties>
-
-	<!-- An announcement and does not add does not add any dependencies, but the dependency     -->
-	<!-- tag will will use the value from the same dependency found in the dependencyManagement -->
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-
-				<!-- Scopes                                                            -->
-				<!-- Compile     Dependencies are available on the classpath           -->
-				<!-- Provided    Dependencies are available from the JDK or container: --> 
-				<!--   Ex. Websserver provides Servlet API                             -->
-				<!-- Runtime     Need at runtime, but not for compile:   JDBC Drivers  -->
-				<!-- Test        Only needed for Test and execution path               -->
-				<!-- Import      indicates that its dependency should be replaced     -->
-				<!--             with all dependencies in the pom                      -->
-				<!-- Transative Scopes                                                 --> 
-				<!--    Compile Scope will pull in Compile and Runtime Scopes          -->
-				<!--    Provided Scope will pull in Compile and Provided scopes        -->
-				<!--    Test Scope will pull in compile and test scope                 -->
-				<!--    Runtime scope will pull in compile scope and runtime scope     -->
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
 	</dependencies>
-
-
-
 </project>
