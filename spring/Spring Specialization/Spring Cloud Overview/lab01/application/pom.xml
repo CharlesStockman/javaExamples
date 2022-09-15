@@ -71,4 +71,15 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<!-- Need the plugin so that springboot can run from maven  -->
+	<!-- However, the Eureka does not need it. Why              -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
