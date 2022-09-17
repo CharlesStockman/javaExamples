@@ -25,6 +25,7 @@ public class Student {
    LASTNAME    VARCHAR(10) NOT NULL,
    DEPARTMENT  VARCHAR(10) NOT NULL,
    FEES        DECIMAL(10,2),
+   FINES 	   DECIMAL(10,2) DEFAULT 0.0, 
    VERSION     BIGINT,
    CONSTRAINT  PK_STUDENT  PRIMARY KEY(STUDENTID)
    );
@@ -41,6 +42,11 @@ public class Student {
 	private String dept;
 	@Column(name="FEES")
 	private Double fees;
+
+	// The amount of money owed to the school for lateness.
+	@Column(name="FINES")
+	private Double fines;
+	
 	@JsonManagedReference
 	@OneToMany(mappedBy="student", orphanRemoval=true, cascade = CascadeType.ALL)
 	private Collection<Course> courses = new ArrayList<Course>();
