@@ -10,6 +10,8 @@ server:
 # eureka.client.fetchRegistery controls whether the client is going to try to connect to the server to 
 #   download data on other services endpoint and caches it locally -- This is a server
 eureka:
+  instance:
+    hostname: localhost
   client:  
     registerWithEureka: false
     fetchRegistry: false
