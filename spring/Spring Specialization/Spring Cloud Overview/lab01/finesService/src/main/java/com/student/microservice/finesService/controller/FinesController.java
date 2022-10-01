@@ -21,6 +21,7 @@ public class FinesController {
     
     @GetMapping(value="/{id}")
     public Double getFine(@PathVariable  int studentId) {
+        System.out.println("Charles Stockman : We have made it into the getFine Controller");
         return finesService.getFine(studentId);
     }
 }

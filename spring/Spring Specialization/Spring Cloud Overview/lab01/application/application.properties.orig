@@ -2,12 +2,12 @@
 #   Can use an entityManager
 # Reactive -- The application should run as a reactive web application and shoudl start an embedded reactive web server
 # Servlet -- The application should run as a servlet-based web application and should start an embedded web server
-#spring.main.web-application-type=servlet
+spring.main.web-application-type=servlet
 
-#spring.jpa.hibernate.ddl-auto=none
-spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
+spring.jpa.hibernate.ddl-auto=none
+#spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 
-#
+# Property is not being used, but the information is useful.
 # server.port -- When set to zero a random server port is selected
 # To see the actual port look for the spring boot line Tomcat started on port(s): port number
 #
@@ -16,6 +16,24 @@ spring.application.name = application
 
 eureka.client.serviceUrl.defaultZone=http://localhost:1111/eureka
 eureka.instance.hostname=localhost
+
+#indicates the interval of heartbeats that the client sends to the server.
+eureka.client.instance.leaseRenewalIntervalInSeconds=1000;
+
+# Indicates the time in seconds that the Eureka server waits since it received the
+# last heartbeat from a client before it can remove that client from its registry
+eureka.client.instance.leaseExpriationDurationInSeconds=2000
+
+#
+# Ribbon Configuration
+#
+
+# The name of service(s) that will be load balanced.
+finesService.ribbon.DeploymentContextBasesVipAddresses: finesService
+
+# The class that goes through the Eureka List and retrives the fineService instances and put them into a ribbon list
+# which can be used for load balancing
+finesService.ribbon.NIWSServerListClassName: com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList
 
 #
 # Creates a string that will make the name of the service unique
