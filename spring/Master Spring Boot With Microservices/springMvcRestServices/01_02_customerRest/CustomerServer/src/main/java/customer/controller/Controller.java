@@ -43,7 +43,7 @@ public class Controller {
      * @param customer      The instance with the data to create the customer
      * @return              A key/value pair in the header with the id of the customer in the HttpHeader
      */
-    @PostMapping("/{name}")
+    @PostMapping()
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         UUID uuid = customerService.createCustomer(customer.getName());
         HttpHeaders headers = new HttpHeaders();
