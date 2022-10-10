@@ -29,7 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerById(UUID uuid) {
-        Customer customer = Customer.builder().primaryKey(UUID.randomUUID()).name("Charles Stockman").build();
+        Customer customer = customerDao.read(uuid);
         log.debug("Charles Stockman service get uuid = " + uuid );
         return customer;
     }
