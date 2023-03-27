@@ -32,7 +32,7 @@
 
   <!-- Bill of Materials for TestContainers          -->
   <!-- Allows the version to be defined in one place -->
-  <!-- Add in the root accessible to all moudles     -->
+  <!-- Add in the root accessible to all modules     -->
   <dependencyManagement>
     <dependencies>
       <dependency>
