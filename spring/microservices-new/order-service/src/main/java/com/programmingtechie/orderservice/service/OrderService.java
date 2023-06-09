@@ -40,12 +40,19 @@ public class OrderService {
         // Call Inventory Service and place order if product is in stock
         // For a single values to determine if the item is in stock: http://localhost:8082/api/inventory/iphone13
         // For multiple values http://localhost:8082/api/inventory/sku_code=iphone-13&sku_code=iphone13-red
-        InventoryResponse[] inventoryResponsesArray = webClient.get()
-                 .uri("http://INVENTORY-SERVICE/api/inventory",
-                         uriBuilder -> uriBuilder.queryParam("skuCode",skuCodes).build())
-                 .retrieve()
-                 .bodyToMono(InventoryResponse[].class)
-                 .block();
+        System.out.println("+++ The SkU Code " + skuCodes);
+        InventoryResponse[] inventoryResponsesArray = null;
+        try {
+            inventoryResponsesArray = webClient.post()
+                    .uri("http://SERVICE-INVENTORY/api/inventory",
+                            uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+                    .retrieve()
+                    .bodyToMono(InventoryResponse[].class)
+                    .block();
+        } catch(Exception exception ) {
+            System.out.println("Exception ----");
+            System.out.println(exception.toString());
+        }
 
 
         boolean allProductsInStock = Arrays.stream(inventoryResponsesArray).allMatch(InventoryResponse::isInStock);

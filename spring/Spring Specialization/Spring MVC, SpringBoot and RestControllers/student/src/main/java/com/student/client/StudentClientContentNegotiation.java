@@ -3,7 +3,6 @@ package com.student.client;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,8 +12,8 @@ import org.springframework.web.client.RestTemplate;
 public class StudentClientContentNegotiation {
 
     /**
-     * Trigger the service
-     * @return
+     * An example of using the rest template to retrieve the Response Entity
+     * containing the first student as the body of the response.
      */
     public void serviceTrigger() {
         String url = "http://localhost:8081/college/student/1";
@@ -25,14 +24,13 @@ public class StudentClientContentNegotiation {
 
     /**
      * Create the headers for the HTTP Request.
+     * <p>
+     *  Note the code selects the first value from the accept keyword.  The data will be returned in that format
+     *  For example "accept: application/xml, application/json" then xml will always used as the response format
+     * </p>
+     * If there is no accept key then the server determines what to send back
      * 
-     * Note the code selects the frist accpet value and use that to return the data
-     * For example "accept: application/xml, applicaiton/json" then xml will always 
-     * be return -- this may different later, but for now its fact.
-     * 
-     * If there  no accept key then the server determines what to send back
-     * 
-     * @return The headers for the http request1
+     * @return The headers for the http request
      */
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
@@ -43,10 +41,10 @@ public class StudentClientContentNegotiation {
 
 
     /**
-     * Dispaly all the information about the a Response Entitty
+     * Dispaly all the information about the Response Entity
      * 
      * @param action -- A description of why this ResponseEntity being displayed
-     * @param responseEntity -- Display informatin about repsonse returned from the Dispatcher
+     * @param responseEntity -- Display information about response returned from the Dispatcher
      */
     private void printResponseEntity( String action, ResponseEntity<?> responseEntity ) {
         

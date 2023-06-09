@@ -15,28 +15,31 @@ import com.student.core.Student;
 public class StudentClientRestTemplate {
 
     /**
-     * Using an Http Post Verb Add a Student
+     * Using an Http Post Verb to add a Student
      */
     public void addStudent() {
-        
+
+        // Create the Student and provide the URL for adding it.
         Student student = new Student("Susan", "Doubtfire", "French", 75.00);
         String url = "http://localhost:8081/college/student";
 
-        // Creates an Entity with headers and a body
+        // Creates an Entity with headers and the student data
         HttpEntity<Student> studentData = new HttpEntity<Student>(student, generateHeaders());
         printHttpEntity("Creating a post object ======================", studentData);
 
         // Add the data to the database and display the ResponseEntity
+        // The data will be sent to the backend using a post command.
         ResponseEntity<String> responseEntity = new RestTemplate().postForEntity(
                 url, studentData, String.class);
         printResponseEntity("postForEntity =====================", responseEntity);
 
-        // Retrieve the new data that was add to the database
+        // Retrieve the new data using getForEntity that returns the ResponseEntity with the Student instance
+        // that was added to the database in the previous code.
         ResponseEntity<Student> studentResponse = new RestTemplate().getForEntity(
             "http://" + responseEntity.getHeaders().getLocation(), Student.class);
         printResponseEntity("getForEntity ================== ", studentResponse);
 
-        // Negative Attempt -- 
+        // Negative Attempt -- To explore what happens if there is a failure
         // Interesting -- If an exception is thrown from the postForEntry the exception will 
         // contain the status code and more.  If the request fails it will not return a Response
         // Entity but throw an exception
@@ -55,7 +58,7 @@ public class StudentClientRestTemplate {
     }
     
     /**
-     * Prodouce an Http Header for the  
+     * Creates headers for the HttpEntity calls
      */
     private HttpHeaders generateHeaders() {
 
@@ -68,10 +71,11 @@ public class StudentClientRestTemplate {
     }
 
     /**
-     * Create HttpHeader for the request
+     * A utility function to print the HttpEntity ( represents an HTTP Request or Response ) consisting of headers
+     * and a body.
      * 
-     * @param action                A description of what is happend
-     * @param responseEntity        The instance that will have it data displayed
+     * @param action                A description of what is being executed.
+     * @param entity                The instance that will have its data displayed
      */
     private void printHttpEntity(String action, HttpEntity<?> entity ) {
         System.out.println("The action is " + action);

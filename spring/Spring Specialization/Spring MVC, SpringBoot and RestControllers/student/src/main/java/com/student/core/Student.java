@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * An object that represent the database operations on the student
+ */
 // @JsonInclude -- Serialized. Without annotation property values are always included, 
 // but by using this annotation one can specify simple exclusion rules to reduce amount 
 // of properties to write out.
@@ -11,18 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude
 @XmlRootElement
 public class Student {
-  /*
-   * TABLE STUDENT
-   (
-   STUDENTID     BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-   FIRSTNAME    VARCHAR(40) NOT NULL,
-   LASTNAME    VARCHAR(10) NOT NULL,
-   DEPARTMENT  VARCHAR(10) NOT NULL,
-   FEES        DECIMAL(10,2),
-   VERSION     BIGINT,
-   CONSTRAINT  PK_STUDENT  PRIMARY KEY(STUDENTID)
-   );
-   */
 	 
 	private long id;
  
@@ -32,7 +23,7 @@ public class Student {
  
 	private String dept;
 	 
-     private Double fees;
+	private Double fees;
 	
 	public Student() {
 		super();

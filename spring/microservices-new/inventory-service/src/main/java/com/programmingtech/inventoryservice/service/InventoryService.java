@@ -1,17 +1,15 @@
 package com.programmingtech.inventoryservice.service;
 
 import com.programmingtech.inventoryservice.dto.InventoryResponse;
+import com.programmingtech.inventoryservice.model.Inventory;
 import com.programmingtech.inventoryservice.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor

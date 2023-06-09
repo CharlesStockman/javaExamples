@@ -9,8 +9,8 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
-  <groupId>com.programingtechie</groupId>
-  <artifactId>microservice-new</artifactId>
+  <groupId>com.programming.techie</groupId>
+  <artifactId>microservices-new</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
 
@@ -20,15 +20,13 @@
     <module>product-service</module>
     <module>order-service</module>
     <module>inventory-service</module>
-    <module>directory-server</module>
+    <module>discovery-server</module>
   </modules>
-
-  <name>microservice-new</name>
-  <url>http://maven.apache.org</url>
 
   <properties>
     <maven.compiler.source>19</maven.compiler.source>
     <maven.compiler.target>19</maven.compiler.target>
+    <spring-cloud.version>2021.0.2</spring-cloud.version>
   </properties>
 
   <!-- Bill of Materials for TestContainers          -->
@@ -39,8 +37,16 @@
       <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers-bom</artifactId>
-        <version>1.17.6</version>
+        <version>1.16.3</version>
         <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <!-- Only use with type pom, replace with the list of dependencies in the specified pom-->
         <scope>import</scope>
       </dependency>
     </dependencies>
@@ -58,6 +64,14 @@
               <artifactId>lombok</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>19</source>
+          <source>19</source>
         </configuration>
       </plugin>
     </plugins>

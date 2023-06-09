@@ -17,7 +17,7 @@ import com.student.service.StudentServiceImpl;
 public class ApplicationConfig {
 
     /**
-     * Create the Dao to access the Student Database
+     * Create the Dao Bean to access the Student Database
      * 
      * @return A StudentDao Bean
      */
@@ -28,7 +28,7 @@ public class ApplicationConfig {
     }
 
     /**
-     * Create the service which will peformt he business logic for the Student
+     * Create the service which will peform  the business logic for the Student
      * 
      * @return a StudentService Bean
      *
