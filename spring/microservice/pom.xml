@@ -20,6 +20,8 @@
 	<modules>
 		<module>eureka</module>
 		<module>address-service</module>
+		<module>employee-service</module>
+		<module>configurationServer</module>
 	</modules>
 
 	<properties>
