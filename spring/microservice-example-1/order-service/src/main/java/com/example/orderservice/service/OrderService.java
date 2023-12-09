@@ -24,7 +24,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public void placeOrder(OrderRequestDto orderRequestDto) {
 
@@ -35,10 +35,16 @@ public class OrderService {
         List<String> skuCodes = order.getOrderLineItemsList().stream().map(orderLineItem -> orderLineItem.getSkuCode()).toList();
 
         // Example of Synchronous Communication between web services
-        // Create a list of sku ccodes and whether they are in 
+        // http://inventory-service/api/inventory   -- Go to Eureka ( or its cache ) and get an instance by
+        // spring.application.name.  Eureka has multiple instances then the webclient must be load balanced when the
+        // bean is created in WebClientConfig.
+        //
+        // Remember we fetch the cache of instances so if Eureka has gone down then the application should still work.
+        //
+        // Create a list of sku codes and whether they are in
         InventoryResponse[] result =
-                webClient.get().
-                        uri("http://localhost:8082/api/inventory", uriBuilder -> uriBuilder.queryParam("sku-code", skuCodes).build()).
+                webClientBuilder.build().get().
+                        uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder.queryParam("sku-code", skuCodes).build()).
                         retrieve().bodyToMono(InventoryResponse[].class).
                         block();
 
