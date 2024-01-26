@@ -7,15 +7,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import com.student.client.StudentClientContentNegotiation;
 import com.student.client.StudentClientRestTemplate;
 
+/**
+ * The purpose is to provide examples of the Spring framework to refer to in the future.
+ */
 @SpringBootApplication
-@EnableConfigurationProperties(value = StudentProperties.class)
 public class StudentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudentApplication.class, args);
-
-		//StudentClientRestTemplate client = new StudentClientRestTemplate();
-		//client.addStudent();
 
 		StudentClientContentNegotiation client2 = new StudentClientContentNegotiation();
 		client2.serviceTrigger();
