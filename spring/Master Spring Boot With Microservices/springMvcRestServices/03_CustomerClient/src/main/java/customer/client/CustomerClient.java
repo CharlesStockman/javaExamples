@@ -69,15 +69,32 @@ public class CustomerClient {
      * Contact the server to create a new customer
      */
     public URI createNewCustomer(Customer customer) {
-        log.debug("Charles Stockman Creating new cuomster with data = " + customer.toString());
-
-
         URI uri = restTemplate.postForLocation(buildUrl(), customer);
-
-        log.debug("Charles Stockman The new URI is " + uri);
-
+        log.debug("Charles Stockman: create a customer with uri " + uri);
         return uri;
     }
+
+    /**
+     * Contact the server to update a customer
+     */
+    public void updateNewCustomer(Customer customer) {
+
+        log.debug("Charles Stockman Update a customer with data " + customer.toString());
+
+        restTemplate.put(buildUrl() + "/" + customer.getPrimaryKey().toString(), customer);
+
+        log.debug("Charles Stockman new customer with data " + customer.toString());
+    }
+
+    /**
+     * Contact the server to delete a customer
+     */
+    public void deleteCustomer(Customer customer ) {
+        log.debug("Charles Stockman delete a customer with data " + customer.toString());
+
+        restTemplate.delete(buildUrl() + "/" + customer.getPrimaryKey().toString());
+    }
+
 
 
 
