@@ -1,0 +1,50 @@
+/**
+ * Linked Hash Map
+ *
+ * Has linked list for keep the insertion that maintains insertion order
+ * Insertion order is not affect if a key is re-inserted in the map
+ * contains a before and after -- why
+ *
+ * Performance
+ *   1. There is a small performance hit for adding an element to a linked list
+ *   2. Iteration is better for LinkedHashMap vs HashMap O(n) vs O(size + capacity)
+ *   3.
+ *
+ * Synchronized map
+ */
+public class LinkedHashMap {
+
+    LinkHashMap<Integer, String> map = new LinkedHashMap<>();
+    map.put(1, "1");
+    map.put(2, "2");
+    map.put(3, "3");
+
+    Set<Integer> keys = map.keySet()
+    Integer[] arr = keys.toArray(new Integer[0]);        // The order will be 1,2,3
+
+    // Access Order
+    // Constructor Initial Capacity, load factor, and the last parameter is the ordering mode
+    //  ordering mode = True ( Access Order ), False ( insertion Order)
+    //          putAll -- operation generates one entry access for each of the mappings int he specified map
+    //          iteration over a map does not affect the order only explicit
+    LinkedHashMap<Integer, String> map new LinkedinHashMap<>(16,.75f, true )
+    map.put(1, null);
+    map.put(2, null);
+    map.put(3, null);
+    map.put(4, null);
+    map.put(5, null)
+
+    Set<Integer> keys;
+
+    keys = map.KeySet();             // 1, 2, 3, 4, 5
+
+    map.get(4)
+    keys = map.KeySet();            // 1,2,3,5,4
+
+    map.get(1)
+    keys = map.keySet();            // 2,3,5,4,1
+
+    // Use in overridden functions usually
+    has a special function removeEldestEntry(Map<K,V> eldest):boolean  // Return true if the old element should be remove and false if not
+
+}
