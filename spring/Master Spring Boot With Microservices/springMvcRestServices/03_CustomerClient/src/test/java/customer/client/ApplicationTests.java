@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.net.URI;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -28,38 +29,77 @@ class ApplicationTests {
 	@Test
 	public void createCustomer() {
 
-		log.debug("Charles Stockman -- Creating a Customer ");
+		log.debug("Charles Stockman -- Creating a Customer using HTTP Post");
 
 		Customer customer = Customer.builder().name("Charles Stockman").build();
 		URI uri = customerClient.createNewCustomer(customer);
+		assertNotNull(uri);
 
 		System.out.println("Charles Stockman : The URI is " + uri);
 		log.debug("Charles Stockman -- The URI is " + uri);
+
 		log.debug("Charles Stockman -- End Creating a customer");
 
-		assertNotNull(uri);
 	}
 
 	/**
-	 * Demostrate the HTTP Get by getting a user
+	 * Demonstrate the HTTP Get by getting a user
 	 */
 	@Test
 	public void getCustomer() {
-		log.debug("Charles Stockman -- Getting a customer");
+		log.debug("Charles Stockman -- Getting a customerusing HTTP Verfb Get");
 
-		Customer customer;
-
-		customer = Customer.builder().name("Charlie Stockman").build();
+		Customer customer = Customer.builder().name("Charlie Stockman").build();
 		URI uri = customerClient.createNewCustomer(customer);
 
 		String uuidString = uri.toString().replace("api/v1/customer/", "");
-		log.debug("Charles Stockman: The UUID is " + uuidString);
-
 		UUID uuid = UUID.fromString(uuidString);
+		log.debug("Charles Stockman: Created a new customer The UUID is " + uuidString);
 
 		Customer customer2 = customerClient.getCustomerById(uuid);
+		log.debug("Charles Stockman : Get Customer by uuid " + customer2.toString());
 
-		log.debug("Charles Stockman --- The customer is " + customer2);
+		assertNotNull(customer2);
+		assertNotNull(customer2.getPrimaryKey());
+		assertNotNull(customer2.getName());
+
+		log.debug("Charles Stockman -- Ending getting a customer");
+	}
+
+	/**
+	 * Demonstrate a put
+	 */
+	@Test public void updateCustomer() {
+		log.debug("Charles Stockman -- Updating a customer using the put HTTP Verb");
+
+		Customer customer = Customer.builder().name("Charlie Stockman").build();
+		URI uri = customerClient.createNewCustomer(customer);
+		log.debug("Charlie Stockman: created customer " + customer);
+
+		String uuidString = uri.toString().replace("api/v1/customer/", "");
+		UUID uuid = UUID.fromString(uuidString);
+		log.debug("Charles Stockman: Created a new customer The UUID is " + uuidString);
+
+		customer = customerClient.getCustomerById(uuid);
+		log.debug("Charles Stockman : The contents of customer is " + customer.toString());
+
+		customer.setName("Charles Stockman");
+		customerClient.updateNewCustomer(customer);
+
+		assertEquals(customer.getName(), "Charles Stockman");
+
+	}
+
+	@Test public void deleteCustomer() {
+		Customer customer = Customer.builder().name("Charlie Stockman").build();
+		URI uri = customerClient.createNewCustomer(customer);
+		log.debug("Charlie Stockman: created customer " + customer);
+
+		String uuidString = uri.toString().replace("api/v1/customer/", "");
+		UUID uuid = UUID.fromString(uuidString);
+		log.debug("Charles Stockman: Created a new customer The UUID is " + uuidString);
+
+		customerClient.
 	}
 
 }
