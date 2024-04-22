@@ -10,7 +10,7 @@ import java.util.*;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private Map<UUID, Customer> customers;
+    private final Map<UUID, Customer> customers;
 
     CustomerServiceImpl() {
         Customer customer1 = Customer.builder()
@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ArrayList<Customer> listAllCustomers() {
-        return new ArrayList<Customer>(customers.values());
+        return new ArrayList<>(customers.values());
     }
 
     @Override

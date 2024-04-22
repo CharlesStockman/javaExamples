@@ -3,7 +3,6 @@ package com.example.spring6RestMvc.service;
 import com.example.spring6RestMvc.model.Beer;
 import com.example.spring6RestMvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -11,12 +10,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.example.spring6RestMvc.model.Beer.*;
+import static com.example.spring6RestMvc.model.Beer.builder;
 
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
-    private Map<UUID, Beer> beerMap;
+    private final Map<UUID, Beer> beerMap;
 
     public BeerServiceImpl() {
         Beer beer1 = builder()
@@ -63,7 +62,7 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public List<Beer> listBeers() {
-        ArrayList<Beer> beers =  new ArrayList<Beer>(beerMap.values());
+        ArrayList<Beer> beers = new ArrayList<>(beerMap.values());
         log.debug("listBeers : listing {}", beers.size());
         return beers;
     }

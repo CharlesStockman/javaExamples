@@ -4,13 +4,11 @@ import com.example.spring6RestMvc.model.Customer;
 import com.example.spring6RestMvc.service.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,24 +35,24 @@ public class CustomerController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("location", "/api/vi/customer/" + customer.getId().toString());
-        return new ResponseEntity<Customer>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("{customerId}")
     public ResponseEntity<Customer> putCustomer(@PathVariable("customerId") UUID customerId, @RequestBody Customer customer) {
         customerService.put(customerId, customer);
-        return new ResponseEntity<Customer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{customerId}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") UUID uuid ) {
         customerService.delete(uuid);
-        return new ResponseEntity<Customer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("{customerId}")
     public ResponseEntity<Customer> patchCustomer(@PathVariable("customerId") UUID customerId, Customer customerData ) {
         customerService.patchById(customerId, customerData);
-        return new ResponseEntity<Customer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,24 +36,24 @@ public class BeerController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("location", "/api/v1/beer/" + savedBeer.getId().toString());
-        return  new ResponseEntity<Beer>(headers, HttpStatus.CREATED);
+        return  new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("{beerId}")
     public ResponseEntity<Beer> updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer ) {
         beerService.updateBeerById(beerId, beer);
-        return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{beerId}")
     public ResponseEntity<Beer> deleteById(@PathVariable("beerId") UUID beerId) {
         beerService.deleteById(beerId);
-        return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("{beerId}")
     public ResponseEntity<Beer> patchById(@PathVariable("beerId") UUID beerId, Beer beerData ) {
         beerService.patchById(beerId, beerData);
-        return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
