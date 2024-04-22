@@ -3,7 +3,9 @@ package com.example.spring6RestMvc.service;
 import com.example.spring6RestMvc.model.Beer;
 import com.example.spring6RestMvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -76,7 +78,7 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Beer saveNewBeer(Beer beer) {
         Beer savedBeer = Beer.builder()
-                .id(beer.getId())
+                .id(UUID.randomUUID())
                 .beerName(beer.getBeerName())
                 .beerStyle(beer.getBeerStyle())
                 .upc(beer.getUpc())
@@ -84,11 +86,56 @@ public class BeerServiceImpl implements BeerService {
                 .price(beer.getPrice())
                 .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
-                .version(beer.getVersion())
+                .version(1)
                 .build();
 
-        beerMap.put(beer.getId(), savedBeer);
+        beerMap.put(savedBeer.getId(), savedBeer);
 
         return savedBeer;
+    }
+
+    @Override
+    public void updateBeerById(UUID beerId, Beer beer) {
+        Beer existing = beerMap.get(beerId);
+        existing.setBeerName(beer.getBeerName());
+        existing.setPrice(beer.getPrice());
+        existing.setUpc(existing.getUpc());
+        existing.setQuantityOnHand(beer.getQuantityOnHand());
+
+        existing.setVersion(existing.getVersion() + 1);
+        existing.setUpdateDate(LocalDateTime.now());
+    }
+
+    @Override
+    public Beer deleteById(UUID beerId) {
+        return beerMap.remove(beerId);
+    }
+
+    @Override
+    public void patchById(UUID beerId, Beer beerData) {
+        Beer beer = beerMap.get(beerId);
+
+        if (StringUtils.hasText(beerData.getBeerName())) {
+            beer.setBeerName(beerData.getBeerName());
+        }
+
+        if (beerData.getBeerStyle() != null ) {
+            beer.setBeerStyle(beerData.getBeerStyle());
+        }
+
+        if ( beerData.getPrice() != null) {
+            beer.setBeerStyle(beerData.getBeerStyle());
+        }
+
+        if ( beerData.getQuantityOnHand() != null ) {
+            beer.setQuantityOnHand(beerData.getQuantityOnHand());
+        }
+
+        if ( StringUtils.hasText(beerData.getUpc())) {
+            beer.setUpc(beerData.getUpc());
+        }
+
+        beer.setVersion(beer.getVersion() + 1);
+        beer.setUpdateDate(LocalDateTime.now());
     }
 }

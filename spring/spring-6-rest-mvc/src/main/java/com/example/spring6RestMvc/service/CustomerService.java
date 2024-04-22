@@ -9,4 +9,12 @@ public interface CustomerService {
     ArrayList<Customer> listAllCustomers();
 
     Customer getCustomerById(UUID id);
+
+    Customer save(Customer customerData);
+
+    void put(UUID customerId, Customer customer);
+
+    Customer delete(UUID uuid);
+
+    void patchById(UUID customerId, Customer customerData);
 }
