@@ -10,15 +10,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.example.spring6RestMvc.model.Beer.builder;
-
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
     private final Map<UUID, Beer> beerMap;
 
     public BeerServiceImpl() {
-        Beer beer1 = builder()
+        Beer beer1 = Beer.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Galaxy Cat")
@@ -30,7 +28,7 @@ public class BeerServiceImpl implements BeerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Beer beer2 = builder()
+        Beer beer2 = Beer.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Crank")
@@ -42,7 +40,7 @@ public class BeerServiceImpl implements BeerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Beer beer3 = builder()
+        Beer beer3 = Beer.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Sunshine City")
@@ -70,7 +68,7 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Beer getBeerById(UUID id) {
         Beer beer = beerMap.get(id);
-        log.debug("getBeerByID for id:{}, beer:{}", id, beer.getBeerName());
+        //log.debug("getBeerByID for id:{}, beer:{}", id, beer.getBeerName());
         return beer;
     }
 
