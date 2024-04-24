@@ -12,7 +12,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final Map<UUID, Customer> customers;
 
-    CustomerServiceImpl() {
+    public CustomerServiceImpl() {
         Customer customer1 = Customer.builder()
                 .id(UUID.randomUUID())
                 .customerName("Charles Stockman")
