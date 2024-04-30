@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.model;
 
+import com.example.spring6RestMvc.util.MetaDataFactory;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,12 +10,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class Customer {
-
-    private UUID id;
     private String customerName;
-    private Integer version;
-    private LocalDateTime createDate;
-    private LocalDateTime lastModifiedDate;
-
-
+    private MetaDataFactory.MetaData metaData;
 }

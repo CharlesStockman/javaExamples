@@ -93,10 +93,6 @@ class BeerControllerTest {
 
         Beer beer = beerServiceImpl.listBeers().getFirst();
 
-        // Get rid of values that it should not have ( data that will be added by the class )
-        beer.setId(null);
-        beer.setVersion(null);
-
         //System.out.println("Example of POJO ot JSON -- " + objectMapper.writeValueAsString(beer));
 
         // Returning the second object so that we have a completed object being returned.

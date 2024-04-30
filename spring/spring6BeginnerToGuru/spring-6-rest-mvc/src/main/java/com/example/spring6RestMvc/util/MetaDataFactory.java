@@ -22,7 +22,7 @@ public class MetaDataFactory {
         metaData.setId(UUID.randomUUID());
         metaData.setCreatedDate(LocalDateTime.now());
         metaData.setModifiedDate(LocalDateTime.now());
-        metaData.setVersion(0);
+        metaData.setVersion(1);
         return metaData;
     }
 

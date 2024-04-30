@@ -34,7 +34,7 @@ public class CustomerController {
         Customer customer = customerService.save(customerData);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("location", "/api/vi/customer/" + customer.getId().toString());
+        headers.add("location", "/api/vi/customer/" + customer.getMetaData().getId().toString());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 

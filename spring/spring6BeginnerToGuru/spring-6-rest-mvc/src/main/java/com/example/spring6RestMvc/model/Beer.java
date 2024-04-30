@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.model;
 
+import com.example.spring6RestMvc.util.MetaDataFactory;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -9,13 +10,14 @@ import java.util.UUID;
 @Builder
 @Data
 public class Beer {
-    private UUID id;
-    private Integer version;
     private String beerName;
     private BeerStyle beerStyle;
     private String upc;
     private Integer quantityOnHand;
     private BigDecimal price;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
+    private MetaDataFactory.MetaData metaData;
+
+    public UUID getId() {
+        return metaData.getId();
+    }
 }

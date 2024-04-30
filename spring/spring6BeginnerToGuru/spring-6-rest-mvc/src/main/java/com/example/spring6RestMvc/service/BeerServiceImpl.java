@@ -2,6 +2,7 @@ package com.example.spring6RestMvc.service;
 
 import com.example.spring6RestMvc.model.Beer;
 import com.example.spring6RestMvc.model.BeerStyle;
+import com.example.spring6RestMvc.util.MetaDataFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,39 +18,30 @@ public class BeerServiceImpl implements BeerService {
 
     public BeerServiceImpl() {
         Beer beer1 = Beer.builder()
-                .id(UUID.randomUUID())
-                .version(1)
                 .beerName("Galaxy Cat")
                 .beerStyle(BeerStyle.PALE_ALE)
                 .upc("123456")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         Beer beer2 = Beer.builder()
-                .id(UUID.randomUUID())
-                .version(1)
                 .beerName("Crank")
                 .beerStyle(BeerStyle.PALE_ALE)
                 .upc("223456")
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         Beer beer3 = Beer.builder()
-                .id(UUID.randomUUID())
-                .version(1)
                 .beerName("Sunshine City")
                 .beerStyle(BeerStyle.IPA)
                 .upc("123456")
                 .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         beerMap = new HashMap<>();
@@ -75,15 +67,11 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Beer saveNewBeer(Beer beer) {
         Beer savedBeer = Beer.builder()
-                .id(UUID.randomUUID())
                 .beerName(beer.getBeerName())
                 .beerStyle(beer.getBeerStyle())
                 .upc(beer.getUpc())
                 .quantityOnHand(beer.getQuantityOnHand())
                 .price(beer.getPrice())
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
-                .version(1)
                 .build();
 
         beerMap.put(savedBeer.getId(), savedBeer);
@@ -98,9 +86,7 @@ public class BeerServiceImpl implements BeerService {
         existing.setPrice(beer.getPrice());
         existing.setUpc(existing.getUpc());
         existing.setQuantityOnHand(beer.getQuantityOnHand());
-
-        existing.setVersion(existing.getVersion() + 1);
-        existing.setUpdateDate(LocalDateTime.now());
+        MetaDataFactory.updateMetaData(existing.getMetaData());
     }
 
     @Override
@@ -132,7 +118,6 @@ public class BeerServiceImpl implements BeerService {
             beer.setUpc(beerData.getUpc());
         }
 
-        beer.setVersion(beer.getVersion() + 1);
-        beer.setUpdateDate(LocalDateTime.now());
+        MetaDataFactory.updateMetaData(beerData.getMetaData());
     }
 }

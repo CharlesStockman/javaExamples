@@ -45,7 +45,7 @@ public class MetaDataClassFactoryTest {
         MetaDataFactory metaDataFactory = new MetaDataFactory();
         MetaDataFactory.MetaData metaData = MetaDataFactory.createMetaData();
         verifyCommonMetaData(metaData);
-        Assertions.assertEquals(metaData.getVersion(), 0);
+        Assertions.assertEquals(metaData.getVersion(), 1);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class MetaDataClassFactoryTest {
         MetaDataFactory metaDataFactory = new MetaDataFactory();
         MetaDataFactory.MetaData metaData = MetaDataFactory.modifyMetaData(MetaDataFactory.createMetaData());
         verifyCommonMetaData(metaData);
-        Assertions.assertEquals(metaData.getVersion(), 1);
+        Assertions.assertEquals(metaData.getVersion(), 2);
     }
 
     private static void verifyCommonMetaData(MetaDataFactory.MetaData metaData) {

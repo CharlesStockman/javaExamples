@@ -1,6 +1,7 @@
 package com.example.spring6RestMvc.service;
 
 import com.example.spring6RestMvc.model.Customer;
+import com.example.spring6RestMvc.util.MetaDataFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,24 +15,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CustomerServiceImpl() {
         Customer customer1 = Customer.builder()
-                .id(UUID.randomUUID())
                 .customerName("Charles Stockman")
-                .version(1)
-                .createDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         Customer customer2 = Customer.builder()
-                .id(UUID.randomUUID())
                 .customerName("Charlie Stockman")
-                .version(1)
-                .createDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         customers = new HashMap<>();
-        customers.put(customer1.getId(),customer1);
-        customers.put(customer2.getId(),customer2);
+        customers.put(customer1.getMetaData().getId(), customer1);
+        customers.put(customer2.getMetaData().getId(), customer2);
     }
 
     @Override
@@ -47,23 +42,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer save(Customer customerData) {
         Customer customer = Customer.builder()
-                .id(UUID.randomUUID())
                 .customerName(customerData.getCustomerName())
-                .version(1)
-                .createDate( LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .metaData(MetaDataFactory.createMetaData())
                 .build();
 
-        customers.put(customer.getId(), customer);
+        customers.put(customer.getMetaData().getId(), customer);
         return customer;
     }
 
     @Override
     public void put(UUID customerId, Customer customerData) {
         Customer customer = customers.get(customerId);
-        customer.setCustomerName(customerData.getCustomerName());
-        customer.setVersion(customer.getVersion() + 1);
-        customer.setLastModifiedDate(LocalDateTime.now());
+        MetaDataFactory.updateMetaData(customerData.getMetaData());
     }
 
     @Override
@@ -75,7 +65,6 @@ public class CustomerServiceImpl implements CustomerService {
     public void patchById(UUID customerId, Customer customerData) {
         Customer customer = customers.get(customerId);
         if (StringUtils.hasText(customerData.getCustomerName())) customer.setCustomerName(customerData.getCustomerName());
-        customer.setVersion(customer.getVersion() + 1);
-        customer.setLastModifiedDate(LocalDateTime.now());
+        MetaDataFactory.updateMetaData(customer.getMetaData());
     }
 }
