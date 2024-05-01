@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.controller;
 
+import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.model.Customer;
 import com.example.spring6RestMvc.service.CustomerService;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,8 @@ public class CustomerController {
     }
 
     @RequestMapping("{customerId}")
-    public Customer getCustomerById(@PathVariable("customerId") UUID id) {
-        return customerService.getCustomerById(id);
+    public Customer getCustomerById(@PathVariable("customerId") UUID id) throws ClassNotFoundException {
+        return customerService.getCustomerById(id).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping

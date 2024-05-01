@@ -2,7 +2,7 @@ package com.example.spring6RestMvc.controller;
 
 import com.example.spring6RestMvc.model.Beer;
 import com.example.spring6RestMvc.service.BeerService;
-import com.example.spring6RestMvc.service.BeerServiceImpl;
+import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,7 +61,7 @@ class BeerControllerTest {
 
         // Two different ways to write the same line
         // given(beerService.getBeerById(any(UUID.class))).willReturn(testBeer);
-        given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+        given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
 
         mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
@@ -157,4 +158,11 @@ class BeerControllerTest {
 
     }
 
+    @Test
+    public void getBeerByIdNotFound() throws Exception {
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID())).andExpect(status().isNotFound());
+
+    }
 }

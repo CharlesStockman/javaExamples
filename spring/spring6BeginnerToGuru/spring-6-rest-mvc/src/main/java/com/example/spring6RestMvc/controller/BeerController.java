@@ -1,8 +1,8 @@
 package com.example.spring6RestMvc.controller;
 
+import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.model.Beer;
 import com.example.spring6RestMvc.service.BeerService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,12 +22,14 @@ public class BeerController {
 
     @GetMapping("{beerId}")
     public Beer getBeerById(@PathVariable("beerId") UUID beerId) {
-        log.debug("Get Beer by Id: {id} in controller");
-        return beerService.getBeerById(beerId);
+            System.out.println("*** Currently in getBeerById *** ");
+            log.debug("Get Beer by Id: {id} in controller");
+            return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
 
     @RequestMapping( method = RequestMethod.GET)
     public List<Beer> listBeers() {
+        System.out.println("*** Currently in getBeerById ******** ");
         return beerService.listBeers();
     }
 
@@ -57,4 +59,5 @@ public class BeerController {
         beerService.patchById(beerId, beerData);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

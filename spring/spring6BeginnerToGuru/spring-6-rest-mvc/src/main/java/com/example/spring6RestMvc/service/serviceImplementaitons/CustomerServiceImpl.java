@@ -1,6 +1,7 @@
-package com.example.spring6RestMvc.service;
+package com.example.spring6RestMvc.service.serviceImplementaitons;
 
 import com.example.spring6RestMvc.model.Customer;
+import com.example.spring6RestMvc.service.CustomerService;
 import com.example.spring6RestMvc.util.MetaDataFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -35,8 +36,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getCustomerById(UUID id) {
-        return customers.get(id);
+    public Optional<Customer> getCustomerById(UUID id) {
+        return Optional.of(customers.get(id));
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.example.spring6RestMvc.controller;
 
 import com.example.spring6RestMvc.model.Customer;
 import com.example.spring6RestMvc.service.CustomerService;
-import com.example.spring6RestMvc.service.CustomerServiceImpl;
+import com.example.spring6RestMvc.service.serviceImplementaitons.CustomerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,7 +59,7 @@ public class CustomerControllerTest {
     public void testGetCustomerById() throws Exception {
         Customer customer = customerServiceImpl.listAllCustomers().getFirst();
 
-        given(customerService.getCustomerById(customer.getMetaData().getId())).willReturn(customer);
+        given(customerService.getCustomerById(customer.getMetaData().getId())).willReturn(Optional.of(customer));
 
         mockMvc.perform(get("/api/v1/customer/" + customer.getMetaData().getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -137,6 +138,13 @@ public class CustomerControllerTest {
         verify(customerService).patchById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
         assertThat(customer.getMetaData().getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(customerMap.get("customerName")).isEqualTo(customerArgumentCaptor.getValue().getCustomerName());
+    }
+
+    @Test
+    public void getCustomerByIdNotFound() throws Exception {
+        given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/v1/customer/" + UUID.randomUUID())).andExpect(status().isNotFound());
     }
 }
 

@@ -1,14 +1,14 @@
-package com.example.spring6RestMvc.service;
+package com.example.spring6RestMvc.service.serviceImplementaitons;
 
 import com.example.spring6RestMvc.model.Beer;
 import com.example.spring6RestMvc.model.BeerStyle;
+import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.util.MetaDataFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -58,10 +58,10 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer getBeerById(UUID id) {
+    public Optional<Beer> getBeerById(UUID id) {
         Beer beer = beerMap.get(id);
         //log.debug("getBeerByID for id:{}, beer:{}", id, beer.getBeerName());
-        return beer;
+        return Optional.of(beer);
     }
 
     @Override
