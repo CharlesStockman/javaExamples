@@ -1,6 +1,5 @@
 package com.example.spring6RestMvc.exception;
 
-import com.example.spring6RestMvc.model.Beer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

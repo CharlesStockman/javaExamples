@@ -4,12 +4,11 @@ import com.example.spring6RestMvc.util.MetaDataFactory;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
 @Data
-public class Beer {
+public class BeerDTO {
     private String beerName;
     private BeerStyle beerStyle;
     private String upc;

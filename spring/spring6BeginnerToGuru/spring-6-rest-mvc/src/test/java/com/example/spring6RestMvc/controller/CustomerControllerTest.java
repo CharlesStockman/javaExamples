@@ -1,7 +1,7 @@
 package com.example.spring6RestMvc.controller;
 
 
-import com.example.spring6RestMvc.model.Customer;
+import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.CustomerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +46,7 @@ public class CustomerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<Customer> customerArgumentCaptor;
+    ArgumentCaptor<CustomerDTO> customerArgumentCaptor;
 
     CustomerService customerServiceImpl;
 
@@ -57,7 +57,7 @@ public class CustomerControllerTest {
 
     @Test
     public void testGetCustomerById() throws Exception {
-        Customer customer = customerServiceImpl.listAllCustomers().getFirst();
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
         given(customerService.getCustomerById(customer.getMetaData().getId())).willReturn(Optional.of(customer));
 
@@ -83,9 +83,9 @@ public class CustomerControllerTest {
 
     @Test
     public void testCreateCustomer() throws Exception {
-        Customer customer = customerServiceImpl.listAllCustomers().getFirst();
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
-        given(customerService.save(any(Customer.class))).willReturn(customerServiceImpl.listAllCustomers().get(1));
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerServiceImpl.listAllCustomers().get(1));
 
         // When setting the content must set the content type too or an HTTP Error Code 415 is returned.
         mockMvc.perform(post("/api/v1/customer")
@@ -98,20 +98,20 @@ public class CustomerControllerTest {
 
     @Test
     public void testUpdateCustomer() throws Exception {
-        Customer customer = customerServiceImpl.listAllCustomers().getFirst();
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
         mockMvc.perform(put("/api/v1/customer/" + customer.getMetaData().getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).put(any(UUID.class), any(Customer.class));
+        verify(customerService).put(any(UUID.class), any(CustomerDTO.class));
 
     }
 
     @Test
     public void testDelete() throws Exception {
-        Customer customer = customerServiceImpl.listAllCustomers().getFirst();
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
         mockMvc.perform(delete("/api/v1/customer/" + customer.getMetaData().getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -124,7 +124,7 @@ public class CustomerControllerTest {
 
     @Test
     public void testPatch() throws Exception {
-        Customer customer = customerServiceImpl.listAllCustomers().getFirst();
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
         Map<String, String> customerMap = new HashMap<>();
         customerMap.put("customerName", "New Name");

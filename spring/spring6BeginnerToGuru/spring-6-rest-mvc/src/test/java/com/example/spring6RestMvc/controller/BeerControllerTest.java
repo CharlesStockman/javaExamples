@@ -1,6 +1,6 @@
 package com.example.spring6RestMvc.controller;
 
-import com.example.spring6RestMvc.model.Beer;
+import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +49,7 @@ class BeerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<Beer> beerArgumentCaptor;
+    ArgumentCaptor<BeerDTO> beerArgumentCaptor;
     @BeforeEach
     void setUp() {
         beerServiceImpl = new BeerServiceImpl();
@@ -57,7 +57,7 @@ class BeerControllerTest {
 
     @Test
     void testGetBeerById() throws Exception {
-        Beer testBeer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO testBeer = beerServiceImpl.listBeers().getFirst();
 
         // Two different ways to write the same line
         // given(beerService.getBeerById(any(UUID.class))).willReturn(testBeer);
@@ -92,12 +92,12 @@ class BeerControllerTest {
         // have function writeValueAsString
         objectMapper.findAndRegisterModules();
 
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         //System.out.println("Example of POJO ot JSON -- " + objectMapper.writeValueAsString(beer));
 
         // Returning the second object so that we have a completed object being returned.
-        given(beerService.saveNewBeer(any(Beer.class))).willReturn(beerServiceImpl.listBeers().get(1));
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
         mockMvc.perform(post("/api/v1/beer")
                 .accept(MediaType.APPLICATION_JSON)
@@ -109,7 +109,7 @@ class BeerControllerTest {
 
     @Test
     void testUpdateBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         mockMvc.perform(put("/api/v1/beer/" + beer.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -118,13 +118,13 @@ class BeerControllerTest {
                 .andExpect(status().isNoContent());
 
         // Verify the object and method has been called.
-        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
+        verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
 
     }
 
     @Test
     void testDeleteBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -141,7 +141,7 @@ class BeerControllerTest {
 
     @Test
     public void testPatchBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
