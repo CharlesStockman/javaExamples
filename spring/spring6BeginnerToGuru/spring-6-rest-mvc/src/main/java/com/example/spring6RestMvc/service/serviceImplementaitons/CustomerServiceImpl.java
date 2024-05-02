@@ -2,10 +2,10 @@ package com.example.spring6RestMvc.service.serviceImplementaitons;
 
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
-import com.example.spring6RestMvc.util.MetaDataFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -17,13 +17,19 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerDTO customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Charles Stockman")
-                .metaData(MetaDataFactory.createMetaData())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         CustomerDTO customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Charlie Stockman")
-                .metaData(MetaDataFactory.createMetaData())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         customers = new HashMap<>();
@@ -44,9 +50,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO save(CustomerDTO customerData) {
         CustomerDTO customer = CustomerDTO.builder()
-                .id(UUID.randomUUID())
                 .customerName(customerData.getCustomerName())
-                .metaData(MetaDataFactory.createMetaData())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         customers.put(customer.getId(), customer);
@@ -56,7 +64,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void put(UUID customerId, CustomerDTO customerData) {
         CustomerDTO customer = customers.get(customerId);
-        MetaDataFactory.updateMetaData(customerData.getMetaData());
     }
 
     @Override
@@ -68,6 +75,5 @@ public class CustomerServiceImpl implements CustomerService {
     public void patchById(UUID customerId, CustomerDTO customerData) {
         CustomerDTO customer = customers.get(customerId);
         if (StringUtils.hasText(customerData.getCustomerName())) customer.setCustomerName(customerData.getCustomerName());
-        MetaDataFactory.updateMetaData(customer.getMetaData());
     }
 }

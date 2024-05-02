@@ -93,8 +93,8 @@ class BeerControllerTest {
         objectMapper.findAndRegisterModules();
 
         BeerDTO beer = beerServiceImpl.listBeers().getFirst();
-
-        //System.out.println("Example of POJO ot JSON -- " + objectMapper.writeValueAsString(beer));
+        beer.setId(null);
+        beer.setVersion(null);
 
         // Returning the second object so that we have a completed object being returned.
         given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));

@@ -3,12 +3,13 @@ package com.example.spring6RestMvc.service.serviceImplementaitons;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.model.BeerStyle;
 import com.example.spring6RestMvc.service.BeerService;
-import com.example.spring6RestMvc.util.MetaDataFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -24,7 +25,10 @@ public class BeerServiceImpl implements BeerService {
                 .upc("123456")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
-                .metaData(MetaDataFactory.createMetaData())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         BeerDTO beer2 = BeerDTO.builder()
@@ -34,7 +38,10 @@ public class BeerServiceImpl implements BeerService {
                 .upc("223456")
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
-                .metaData(MetaDataFactory.createMetaData())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         BeerDTO beer3 = BeerDTO.builder()
@@ -44,7 +51,10 @@ public class BeerServiceImpl implements BeerService {
                 .upc("123456")
                 .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
-                .metaData(MetaDataFactory.createMetaData())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         beerMap = new HashMap<>();
@@ -70,12 +80,15 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public BeerDTO saveNewBeer(BeerDTO beer) {
         BeerDTO savedBeer = BeerDTO.builder()
-                .id(UUID.randomUUID())
                 .beerName(beer.getBeerName())
                 .beerStyle(beer.getBeerStyle())
                 .upc(beer.getUpc())
                 .quantityOnHand(beer.getQuantityOnHand())
                 .price(beer.getPrice())
+                .id(UUID.randomUUID())
+                .version(1)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .build();
 
         beerMap.put(savedBeer.getId(), savedBeer);
@@ -90,7 +103,6 @@ public class BeerServiceImpl implements BeerService {
         existing.setPrice(beer.getPrice());
         existing.setUpc(existing.getUpc());
         existing.setQuantityOnHand(beer.getQuantityOnHand());
-        MetaDataFactory.updateMetaData(existing.getMetaData());
     }
 
     @Override
@@ -121,7 +133,5 @@ public class BeerServiceImpl implements BeerService {
         if ( StringUtils.hasText(beerData.getUpc())) {
             beer.setUpc(beerData.getUpc());
         }
-
-        MetaDataFactory.updateMetaData(beerData.getMetaData());
     }
 }

@@ -1,15 +1,20 @@
 package com.example.spring6RestMvc.model;
 
-import com.example.spring6RestMvc.util.MetaDataFactory;
+import jakarta.persistence.Version;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @Builder
 public class CustomerDTO {
     private UUID id;
+    private Integer version;
+
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+
     private String customerName;
-    private MetaDataFactory.MetaData metaData;
 }
