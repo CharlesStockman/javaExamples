@@ -9,6 +9,7 @@ import java.util.UUID;
 @Builder
 @Data
 public class BeerDTO {
+    private UUID id;
     private String beerName;
     private BeerStyle beerStyle;
     private String upc;
@@ -16,7 +17,4 @@ public class BeerDTO {
     private BigDecimal price;
     private MetaDataFactory.MetaData metaData;
 
-    public UUID getId() {
-        return metaData.getId();
-    }
 }

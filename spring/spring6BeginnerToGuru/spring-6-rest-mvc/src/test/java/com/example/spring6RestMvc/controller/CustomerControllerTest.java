@@ -59,13 +59,13 @@ public class CustomerControllerTest {
     public void testGetCustomerById() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
-        given(customerService.getCustomerById(customer.getMetaData().getId())).willReturn(Optional.of(customer));
+        given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
 
-        mockMvc.perform(get("/api/v1/customer/" + customer.getMetaData().getId())
+        mockMvc.perform(get("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.metaData.id", is(customer.getMetaData().getId().toString())))
+                .andExpect(jsonPath("$.id", is(customer.getId().toString())))
                 .andExpect(jsonPath("$.customerName", is(customer.getCustomerName())));
     }
 
@@ -100,7 +100,7 @@ public class CustomerControllerTest {
     public void testUpdateCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
-        mockMvc.perform(put("/api/v1/customer/" + customer.getMetaData().getId())
+        mockMvc.perform(put("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
@@ -113,12 +113,12 @@ public class CustomerControllerTest {
     public void testDelete() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
-        mockMvc.perform(delete("/api/v1/customer/" + customer.getMetaData().getId())
+        mockMvc.perform(delete("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
         verify(customerService).delete(uuidArgumentCaptor.capture());
-        assertThat(customer.getMetaData().getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 
     }
 
@@ -129,14 +129,14 @@ public class CustomerControllerTest {
         Map<String, String> customerMap = new HashMap<>();
         customerMap.put("customerName", "New Name");
 
-        mockMvc.perform( patch( "/api/v1/customer/" + customer.getMetaData().getId())
+        mockMvc.perform( patch( "/api/v1/customer/" + customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerMap)))
                 .andExpect(status().isNoContent());
 
         verify(customerService).patchById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
-        assertThat(customer.getMetaData().getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(customerMap.get("customerName")).isEqualTo(customerArgumentCaptor.getValue().getCustomerName());
     }
 

@@ -15,18 +15,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CustomerServiceImpl() {
         CustomerDTO customer1 = CustomerDTO.builder()
+                .id(UUID.randomUUID())
                 .customerName("Charles Stockman")
                 .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         CustomerDTO customer2 = CustomerDTO.builder()
+                .id(UUID.randomUUID())
                 .customerName("Charlie Stockman")
                 .metaData(MetaDataFactory.createMetaData())
                 .build();
 
         customers = new HashMap<>();
-        customers.put(customer1.getMetaData().getId(), customer1);
-        customers.put(customer2.getMetaData().getId(), customer2);
+        customers.put(customer1.getId(), customer1);
+        customers.put(customer2.getId(), customer2);
     }
 
     @Override
@@ -42,11 +44,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO save(CustomerDTO customerData) {
         CustomerDTO customer = CustomerDTO.builder()
+                .id(UUID.randomUUID())
                 .customerName(customerData.getCustomerName())
                 .metaData(MetaDataFactory.createMetaData())
                 .build();
 
-        customers.put(customer.getMetaData().getId(), customer);
+        customers.put(customer.getId(), customer);
         return customer;
     }
 

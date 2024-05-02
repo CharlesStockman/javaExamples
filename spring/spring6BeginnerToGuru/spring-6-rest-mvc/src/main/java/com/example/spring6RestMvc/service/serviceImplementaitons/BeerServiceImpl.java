@@ -18,6 +18,7 @@ public class BeerServiceImpl implements BeerService {
 
     public BeerServiceImpl() {
         BeerDTO beer1 = BeerDTO.builder()
+                .id(UUID.randomUUID())
                 .beerName("Galaxy Cat")
                 .beerStyle(BeerStyle.PALE_ALE)
                 .upc("123456")
@@ -27,6 +28,7 @@ public class BeerServiceImpl implements BeerService {
                 .build();
 
         BeerDTO beer2 = BeerDTO.builder()
+                .id(UUID.randomUUID())
                 .beerName("Crank")
                 .beerStyle(BeerStyle.PALE_ALE)
                 .upc("223456")
@@ -36,6 +38,7 @@ public class BeerServiceImpl implements BeerService {
                 .build();
 
         BeerDTO beer3 = BeerDTO.builder()
+                .id(UUID.randomUUID())
                 .beerName("Sunshine City")
                 .beerStyle(BeerStyle.IPA)
                 .upc("123456")
@@ -67,6 +70,7 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public BeerDTO saveNewBeer(BeerDTO beer) {
         BeerDTO savedBeer = BeerDTO.builder()
+                .id(UUID.randomUUID())
                 .beerName(beer.getBeerName())
                 .beerStyle(beer.getBeerStyle())
                 .upc(beer.getUpc())

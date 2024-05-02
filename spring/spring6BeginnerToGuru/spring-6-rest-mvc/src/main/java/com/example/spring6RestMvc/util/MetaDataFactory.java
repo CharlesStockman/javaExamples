@@ -10,7 +10,6 @@ public class MetaDataFactory {
 
     @Data
     public static class MetaData {
-        private UUID id;
         private Integer version;
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
@@ -19,7 +18,6 @@ public class MetaDataFactory {
 
     public static MetaData createMetaData() {
         MetaData metaData = new MetaData();
-        metaData.setId(UUID.randomUUID());
         metaData.setCreatedDate(LocalDateTime.now());
         metaData.setModifiedDate(LocalDateTime.now());
         metaData.setVersion(1);

@@ -58,7 +58,6 @@ public class MetaDataClassFactoryTest {
 
     private static void verifyCommonMetaData(MetaDataFactory.MetaData metaData) {
         Assertions.assertNotNull(metaData);
-        Assertions.assertNotNull(metaData.getId());
         Assertions.assertNotNull(metaData.getCreatedDate());
         Assertions.assertNotNull(metaData.getModifiedDate());
 
