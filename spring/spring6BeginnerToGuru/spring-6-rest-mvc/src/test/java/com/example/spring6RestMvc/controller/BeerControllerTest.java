@@ -165,4 +165,5 @@ class BeerControllerTest {
         mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID())).andExpect(status().isNotFound());
 
     }
+
 }
