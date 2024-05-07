@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class Spring6RestMvcApplicationTests {
 
     @Test
-    void contextLoads() {
+    void
+    contextLoads() {
     }
 
 }
