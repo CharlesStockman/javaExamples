@@ -1,10 +1,7 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
 import com.example.spring6RestMvc.model.CustomerDTO;
-import com.example.spring6RestMvc.repositories.CustomerRepository;
 import com.example.spring6RestMvc.service.CustomerService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -64,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void put(UUID customerId, CustomerDTO customerData) {
-        CustomerDTO customer = customers.get(customerId);
+        customers.put(customerId, customerData);
     }
 
     @Override

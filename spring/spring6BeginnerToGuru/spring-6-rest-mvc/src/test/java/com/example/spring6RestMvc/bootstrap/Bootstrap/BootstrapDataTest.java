@@ -26,7 +26,7 @@ public class BootstrapDataTest {
 
     @Test
     void TestRun() throws Exception {
-        bootstrapData.run(null);
+        bootstrapData.run((String) null);
         Assertions.assertEquals(3, beerRepository.count());
         Assertions.assertEquals(2, customerRepository.count());
     }

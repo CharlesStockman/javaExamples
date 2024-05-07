@@ -1,12 +1,10 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
-import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.mappers.BeerMapper;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.repositories.BeerRepository;
 import com.example.spring6RestMvc.service.BeerService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
