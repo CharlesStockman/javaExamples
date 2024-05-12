@@ -5,6 +5,7 @@ import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.service.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,8 +53,9 @@ public class BeerController {
     }
 
     @DeleteMapping("{beerId}")
-    public ResponseEntity<BeerDTO> deleteById(@PathVariable("beerId") UUID beerId) {
-        beerService.deleteById(beerId);
+    public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId) {
+        boolean result = beerService.deleteById(beerId);
+        if ( !result ) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

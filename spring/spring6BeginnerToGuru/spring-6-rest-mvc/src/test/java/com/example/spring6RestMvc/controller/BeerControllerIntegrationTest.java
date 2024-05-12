@@ -5,6 +5,7 @@ import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.mappers.BeerMapper;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.repositories.BeerRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,6 +78,8 @@ class BeerControllerIntegrationTest {
     }
 
     @Test
+    @Rollback
+    @Transactional
     void updateExistingBeer() {
         Beer beer = beerRepository.findAll().getFirst();
         BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
@@ -100,7 +103,25 @@ class BeerControllerIntegrationTest {
                 () -> beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build()));
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    void deleteBeerByIdFound() {
+        Beer beer = beerRepository.findAll().getFirst();
 
+        ResponseEntity beerDTOResponseEntity = beerController.deleteById(beer.getId());
+        assertThat(beerDTOResponseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+        assertThat(beerRepository.findById(beer.getId()).isPresent()).isFalse();
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void deleteBeerByIdNotFound() {
+        assertThrows( NotFoundException.class,
+                () -> { beerController.deleteById(UUID.randomUUID());
+        });
+    }
 
 
 }

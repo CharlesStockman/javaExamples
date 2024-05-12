@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
+import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.mappers.BeerMapper;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.repositories.BeerRepository;
@@ -59,8 +60,14 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public BeerDTO deleteById(UUID beerId) {
-        return null;
+    public Boolean deleteById(UUID beerId) {
+        Boolean found = false;
+        if ( beerRepository.existsById(beerId)) {
+            found = true;
+            beerRepository.deleteById(beerId);
+        }
+        
+        return found;
     }
 
     @Override
