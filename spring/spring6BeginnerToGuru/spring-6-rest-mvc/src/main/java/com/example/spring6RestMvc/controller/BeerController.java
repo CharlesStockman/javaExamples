@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -44,7 +45,9 @@ public class BeerController {
 
     @PutMapping("{beerId}")
     public ResponseEntity<BeerDTO> updateById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer ) {
-        beerService.updateBeerById(beerId, beer);
+        Optional<BeerDTO> returnedBeer = beerService.updateBeerById(beerId, beer);
+        if ( returnedBeer.isEmpty())
+            throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
