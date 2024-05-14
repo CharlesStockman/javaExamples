@@ -3,6 +3,7 @@ package com.example.spring6RestMvc.controller;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -99,12 +102,13 @@ class BeerControllerTest {
         // Returning the second object so that we have a completed object being returned.
         given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
-        mockMvc.perform(post("/api/v1/beer")
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/v1/beer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"));
+                .andExpect(header().exists("Location")).andReturn();
     }
 
     @Test
@@ -170,4 +174,19 @@ class BeerControllerTest {
 
     }
 
+    @Test
+    void testCreateNullBeerName() throws Exception {
+
+        BeerDTO beerDTO = BeerDTO.builder().build();
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        MvcResult mvcResult = mockMvc.perform( post("/api/v1/beer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(beerDTO)))
+            .andExpect(status().isBadRequest()).andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
+    }
 }
