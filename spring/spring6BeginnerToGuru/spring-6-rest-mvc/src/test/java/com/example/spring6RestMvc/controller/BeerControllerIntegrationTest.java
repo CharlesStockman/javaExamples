@@ -4,9 +4,12 @@ import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.mappers.BeerMapper;
 import com.example.spring6RestMvc.model.BeerDTO;
+import com.example.spring6RestMvc.model.BeerStyle;
 import com.example.spring6RestMvc.repositories.BeerRepository;
-import org.junit.jupiter.api.Assertions;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -14,15 +17,21 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.SerializationUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@Slf4j
 class BeerControllerIntegrationTest {
 
     @Autowired
@@ -33,6 +42,7 @@ class BeerControllerIntegrationTest {
 
     @Autowired
     BeerMapper beerMapper;
+
 
     @Test
     void testListBeers() {
@@ -123,5 +133,31 @@ class BeerControllerIntegrationTest {
         });
     }
 
+    @Test
+    public void testPatchWithInvalidId() {
+        Beer beer = beerRepository.findAll().getFirst();
+        assertThrows( NotFoundException.class, () -> beerController.patchById(UUID.randomUUID(), beerMapper.beerToBeerDTO(beer)));
+    }
+    @Test
+    @Transactional
+    @Rollback
+    public void testPatchWithValidId() {
 
+        // Expected Beer
+        BeerDTO expectedBeer = SerializationUtils.clone(beerController.listBeers().getFirst());
+        expectedBeer.setBeerName("PatchName");
+        expectedBeer.setBeerStyle(BeerStyle.GOSE);
+        expectedBeer.setUpc("PatchUpc");
+        expectedBeer.setPrice(new BigDecimal(333));
+        expectedBeer.setQuantityOnHand(333);
+
+        log.debug("Expected Beer = " + expectedBeer.toString());
+
+        beerController.patchById(expectedBeer.getId(), expectedBeer);
+        BeerDTO actualBeer = beerController.getBeerById(expectedBeer.getId());
+        assertThat(actualBeer).isEqualTo(expectedBeer);
+
+
+
+    }
 }

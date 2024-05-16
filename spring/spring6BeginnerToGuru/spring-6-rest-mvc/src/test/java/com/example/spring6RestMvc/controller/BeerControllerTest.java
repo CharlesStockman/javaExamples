@@ -3,7 +3,6 @@ package com.example.spring6RestMvc.controller;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.SerializationUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -154,6 +158,9 @@ class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 
+        given(beerService.patchById(any(), any())).willReturn( Optional.of(beer) );
+
+
         mockMvc.perform( patch("/api/v1/beer/" + beer.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerMap))
@@ -188,7 +195,6 @@ class BeerControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.length()",is(2)))
         .andReturn();
-
 
         System.out.println(mvcResult.getResponse().getContentAsString());
     }

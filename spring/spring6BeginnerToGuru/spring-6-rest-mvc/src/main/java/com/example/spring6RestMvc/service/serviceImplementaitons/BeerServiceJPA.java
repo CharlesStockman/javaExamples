@@ -1,6 +1,5 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
-import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.mappers.BeerMapper;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.repositories.BeerRepository;
@@ -71,7 +70,24 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public void patchById(UUID beerId, BeerDTO beerData) {
+    public Optional<BeerDTO> patchById(UUID beerId, BeerDTO beerData) {
 
+        AtomicReference<Optional<BeerDTO>> atomicBeer = new AtomicReference<>();
+
+        beerRepository.findById(beerId).ifPresentOrElse(
+                foundBeer -> {
+
+                    if ( foundBeer.getBeerName() != null ) foundBeer.setBeerName(beerData.getBeerName());
+                    if ( foundBeer.getBeerStyle() != null ) foundBeer.setBeerStyle(beerData.getBeerStyle());
+                    if ( foundBeer.getPrice() != null ) foundBeer.setPrice(beerData.getPrice());
+                    if ( foundBeer.getQuantityOnHand() != null ) foundBeer.setQuantityOnHand(beerData.getQuantityOnHand());
+                    if ( foundBeer.getUpc() != null ) foundBeer.setUpc(beerData.getUpc());
+                    atomicBeer.set(Optional.of(beerData));
+                },
+                () -> {
+                    atomicBeer.set(Optional.empty());
+                });
+
+        return atomicBeer.get();
     }
 }

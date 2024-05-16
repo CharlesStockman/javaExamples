@@ -62,7 +62,8 @@ public class BeerController {
 
     @PatchMapping("{beerId}")
     public ResponseEntity<BeerDTO> patchById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beerData ) {
-        beerService.patchById(beerId, beerData);
+        Optional<BeerDTO> beerDTO = beerService.patchById(beerId, beerData);
+        if ( beerDTO.isEmpty() ) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
