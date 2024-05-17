@@ -60,8 +60,9 @@ class BeerControllerIntegrationTest {
 
     @Test
     void TestGetById() {
-        Beer expectedBeer = beerRepository.findAll().getFirst();
-        assertThat( beerController.getBeerById(expectedBeer.getId()).getBeerName()).isEqualTo(expectedBeer.getBeerName());
+        Beer beer = beerRepository.findAll().getFirst();
+        BeerDTO dto = beerController.getBeerById(beer.getId());
+        assertThat(dto.getBeerName()).isEqualTo(beer.getBeerName());
     }
 
     @Test
@@ -91,11 +92,14 @@ class BeerControllerIntegrationTest {
     @Transactional
     void updateExistingBeer() {
         Beer beer = beerRepository.findAll().getFirst();
+        BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
+        beerDTO.setId(null);
+        beerDTO.setVersion(null);
 
         final String beerName = "UPDATED";
-        beer.setBeerName(beerName);
+        beerDTO.setBeerName(beerName);
 
-        ResponseEntity<BeerDTO> responseEntity = beerController.updateById(beer.getId(), beer);
+        ResponseEntity<BeerDTO> responseEntity = beerController.updateById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         Beer updatedBeer = beerRepository.findById(beer.getId()).get();
@@ -106,7 +110,7 @@ class BeerControllerIntegrationTest {
     void testUpdateNotFound() {
         assertThrows(
                 NotFoundException.class,
-                () -> beerController.updateById(UUID.randomUUID(), Beer.builder().build()));
+                () -> beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build()));
     }
 
     @Test
@@ -132,7 +136,7 @@ class BeerControllerIntegrationTest {
     @Test
     public void testPatchWithInvalidId() {
         Beer beer = beerRepository.findAll().getFirst();
-        assertThrows( NotFoundException.class, () -> beerController.patchById(UUID.randomUUID(), beer));
+        assertThrows( NotFoundException.class, () -> beerController.patchById(UUID.randomUUID(), beerMapper.beerToBeerDTO(beer)));
     }
     @Test
     @Transactional
@@ -149,7 +153,7 @@ class BeerControllerIntegrationTest {
 
         log.debug("Expected Beer = " + expectedBeer.toString());
 
-        beerController.patchById(expectedBeer.getId(), beerMapper.beerDTOToBear(expectedBeer));
+        beerController.patchById(expectedBeer.getId(), expectedBeer);
         BeerDTO actualBeer = beerController.getBeerById(expectedBeer.getId());
         assertThat(actualBeer).isEqualTo(expectedBeer);
 

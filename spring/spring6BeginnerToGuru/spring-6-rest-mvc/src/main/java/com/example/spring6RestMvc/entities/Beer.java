@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Beer implements Serializable {
+public class Beer {
 
     @Id
     @GeneratedValue(generator="UUID")

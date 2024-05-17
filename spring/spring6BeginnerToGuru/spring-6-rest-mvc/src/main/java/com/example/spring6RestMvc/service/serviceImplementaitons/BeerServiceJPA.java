@@ -1,6 +1,5 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
-import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.mappers.BeerMapper;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.repositories.BeerRepository;
@@ -23,34 +22,34 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<Beer> listBeers() {
-        return beerRepository.findAll();
+    public List<BeerDTO> listBeers() {
+        return beerRepository.findAll().stream().map(beerMapper::beerToBeerDTO).toList();
     }
 
     @Override
-    public Optional<Beer> getBeerById(UUID uuid) {
-        return Optional.ofNullable(beerRepository.findById(uuid).orElse(null));
+    public Optional<BeerDTO> getBeerById(UUID uuid) {
+        return Optional.ofNullable(beerMapper.beerToBeerDTO(beerRepository.findById(uuid).orElse(null)));
     }
 
     @Override
-    public Beer saveNewBeer(BeerDTO beerDTO) {
-        return beerRepository.save(beerMapper.beerDTOToBear(beerDTO));
+    public BeerDTO saveNewBeer(BeerDTO beerDTO) {
+        return beerMapper.beerToBeerDTO(beerRepository.save(beerMapper.beerDTOToBear(beerDTO)));
 
     }
 
     @Override
-    public Optional<Beer> updateBeerById(UUID beerId, Beer beer) {
+    public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beerDTO) {
 
         // Can not do any updates outside the lambda function
-        AtomicReference<Optional<Beer>> atomicReference = new AtomicReference<>();
+        AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(
                 foundBeer -> {
-                    foundBeer.setBeerName(beer.getBeerName());
-                    foundBeer.setBeerStyle(beer.getBeerStyle());
-                    foundBeer.setUpc(beer.getUpc());
-                    foundBeer.setPrice(beer.getPrice());
-                    atomicReference.set(Optional.of(beerRepository.save(foundBeer)));
+                    foundBeer.setBeerName(beerDTO.getBeerName());
+                    foundBeer.setBeerStyle(beerDTO.getBeerStyle());
+                    foundBeer.setUpc(beerDTO.getUpc());
+                    foundBeer.setPrice(beerDTO.getPrice());
+                    atomicReference.set(Optional.of(beerMapper.beerToBeerDTO(beerRepository.save(foundBeer))));
                 },
                 () -> { atomicReference.set(Optional.empty());
                 }
@@ -71,9 +70,9 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public Optional<Beer> patchById(UUID beerId, Beer beerData) {
+    public Optional<BeerDTO> patchById(UUID beerId, BeerDTO beerData) {
 
-        AtomicReference<Optional<Beer>> atomicBeer = new AtomicReference<>();
+        AtomicReference<Optional<BeerDTO>> atomicBeer = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(
                 foundBeer -> {

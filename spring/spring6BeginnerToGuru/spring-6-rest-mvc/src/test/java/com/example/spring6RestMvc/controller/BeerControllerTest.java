@@ -1,12 +1,10 @@
 package com.example.spring6RestMvc.controller;
 
-import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -38,8 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // A test splice limited to the BeerController classed instead of all classes
 // Allows management of this class only
-@Disabled("@WebMVC Test is not injecting Beer Mapper ")
-
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
@@ -60,16 +56,15 @@ class BeerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<Beer> beerArgumentCaptor;
+    ArgumentCaptor<BeerDTO> beerArgumentCaptor;
     @BeforeEach
     void setUp() {
         beerServiceImpl = new BeerServiceImpl();
     }
 
-   @Disabled("@WebMVC Test is not injecting Beer Mapper ")
     @Test
     void testGetBeerById() throws Exception {
-        Beer testBeer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO testBeer = beerServiceImpl.listBeers().getFirst();
 
         // Two different ways to write the same line
         // given(beerService.getBeerById(any(UUID.class))).willReturn(testBeer);
@@ -84,8 +79,6 @@ class BeerControllerTest {
                 .andExpect(jsonPath("$.beerName", is(testBeer.getBeerName())));
     }
 
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
-
     @Test
     public void testListBeers() throws Exception {
         given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
@@ -98,7 +91,6 @@ class BeerControllerTest {
 
     }
 
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
     @Test
     void testCreateNewBeer() throws Exception {
 
@@ -107,7 +99,7 @@ class BeerControllerTest {
         // have function writeValueAsString
         objectMapper.findAndRegisterModules();
 
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
         beer.setId(null);
         beer.setVersion(null);
 
@@ -122,10 +114,10 @@ class BeerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location")).andReturn();
     }
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
+
     @Test
     void testUpdateBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
@@ -136,14 +128,13 @@ class BeerControllerTest {
                 .andExpect(status().isNoContent());
 
         // Verify the object and method has been called.
-        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
+        verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
 
     }
 
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
     @Test
     void testDeleteBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         given(beerService.deleteById(any())).willReturn(true);
 
@@ -160,10 +151,9 @@ class BeerControllerTest {
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
     @Test
     public void testPatchBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
@@ -183,7 +173,6 @@ class BeerControllerTest {
 
     }
 
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
     @Test
     public void getBeerByIdNotFound() throws Exception {
         given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
@@ -192,7 +181,6 @@ class BeerControllerTest {
 
     }
 
-    @Disabled("@WebMVC Test is not injecting Beer Mapper ")
     @Test
     void testCreateNullBeerName() throws Exception {
 
