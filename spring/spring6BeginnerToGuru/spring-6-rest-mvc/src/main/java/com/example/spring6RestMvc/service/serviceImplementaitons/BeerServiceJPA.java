@@ -51,8 +51,7 @@ public class BeerServiceJPA implements BeerService {
                     foundBeer.setPrice(beerDTO.getPrice());
                     atomicReference.set(Optional.of(beerMapper.beerToBeerDTO(beerRepository.save(foundBeer))));
                 },
-                () -> { atomicReference.set(Optional.empty());
-                }
+                () -> atomicReference.set(Optional.empty())
         );
 
         return atomicReference.get();
@@ -84,9 +83,7 @@ public class BeerServiceJPA implements BeerService {
                     if ( foundBeer.getUpc() != null ) foundBeer.setUpc(beerData.getUpc());
                     atomicBeer.set(Optional.of(beerData));
                 },
-                () -> {
-                    atomicBeer.set(Optional.empty());
-                });
+                () -> atomicBeer.set(Optional.empty()));
 
         return atomicBeer.get();
     }

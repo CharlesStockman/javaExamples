@@ -5,7 +5,6 @@ import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.service.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +24,11 @@ public class BeerController {
 
     @GetMapping("{beerId}")
     public BeerDTO getBeerById(@PathVariable("beerId") UUID beerId) {
-            System.out.println("*** Currently in getBeerById *** ");
-            log.debug("Get Beer by Id: {id} in controller");
             return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
 
     @RequestMapping( method = RequestMethod.GET)
     public List<BeerDTO> listBeers() {
-        System.out.println("*** Currently in getBeerById ******** ");
         return beerService.listBeers();
     }
 
@@ -48,8 +44,7 @@ public class BeerController {
     @PutMapping("{beerId}")
     public ResponseEntity<BeerDTO> updateById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer ) {
         Optional<BeerDTO> returnedBeer = beerService.updateBeerById(beerId, beer);
-        if ( returnedBeer.isEmpty())
-            throw new NotFoundException();
+        if ( returnedBeer.isEmpty()) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
