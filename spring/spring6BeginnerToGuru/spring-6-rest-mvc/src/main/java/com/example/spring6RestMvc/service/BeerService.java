@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.service;
 
+import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.model.BeerDTO;
 
 import java.util.List;
@@ -8,15 +9,15 @@ import java.util.UUID;
 
 public interface BeerService {
 
-    List<BeerDTO> listBeers();
+    List<Beer> listBeers();
 
-    Optional<BeerDTO> getBeerById(UUID uuid);
+    Optional<Beer> getBeerById(UUID uuid);
 
-    BeerDTO saveNewBeer(BeerDTO beer);
+    Beer saveNewBeer(BeerDTO beer);
 
-    Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer);
+    Optional<Beer> updateBeerById(UUID beerId, Beer beer);
 
     Boolean deleteById(UUID beerId);
 
-    Optional<BeerDTO> patchById(UUID beerId, BeerDTO beerData);
+    Optional<Beer> patchById(UUID beerId, Beer beerData);
 }
