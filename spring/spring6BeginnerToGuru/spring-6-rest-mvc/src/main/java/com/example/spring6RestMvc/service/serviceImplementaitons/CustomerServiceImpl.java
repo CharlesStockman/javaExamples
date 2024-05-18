@@ -60,8 +60,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void put(UUID customerId, CustomerDTO customerData) {
+    public Optional<CustomerDTO> put(UUID customerId, CustomerDTO customerData) {
+        Optional<CustomerDTO> customerDTO = null;
         customers.put(customerId, customerData);
+        return customerDTO.of(customerData);
     }
 
     @Override

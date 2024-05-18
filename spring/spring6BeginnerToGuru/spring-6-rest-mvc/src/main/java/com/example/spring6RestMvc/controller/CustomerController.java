@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -41,7 +42,8 @@ public class CustomerController {
 
     @PutMapping("{customerId}")
     public ResponseEntity<CustomerDTO> putCustomer(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDTO customer) {
-        customerService.put(customerId, customer);
+        Optional<CustomerDTO> customerDTO = customerService.put(customerId, customer);
+        if ( customerDTO.isEmpty()) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

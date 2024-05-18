@@ -1,6 +1,7 @@
 package com.example.spring6RestMvc.controller;
 
 
+import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.CustomerServiceImpl;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -56,6 +58,18 @@ public class CustomerControllerTest {
     }
 
     @Test
+    public void testListAllCustomers() throws Exception {
+        given(customerService.listAllCustomers()).willReturn(customerServiceImpl.listAllCustomers());
+
+        mockMvc.perform(get("/api/v1/customer")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(2)));
+
+    }
+
+    @Test
     public void testGetCustomerById() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
@@ -67,18 +81,6 @@ public class CustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(customer.getId().toString())))
                 .andExpect(jsonPath("$.customerName", is(customer.getCustomerName())));
-    }
-
-    @Test
-    public void testListAllCustomers() throws Exception {
-        given(customerService.listAllCustomers()).willReturn(customerServiceImpl.listAllCustomers());
-
-        mockMvc.perform(get("/api/v1/customer")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(2)));
-
     }
 
     @Test
@@ -100,6 +102,9 @@ public class CustomerControllerTest {
     public void testUpdateCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
+        given(customerService.put(any(UUID.class), any(CustomerDTO.class))).willReturn(Optional.of(customer));
+
+
         mockMvc.perform(put("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customer)))
@@ -107,6 +112,16 @@ public class CustomerControllerTest {
 
         verify(customerService).put(any(UUID.class), any(CustomerDTO.class));
 
+    }
+
+    @Test
+    public void testUpdateCustomerWithInvalidId() throws Exception {
+        CustomerDTO customerDTO = customerServiceImpl.listAllCustomers().getFirst();
+        mockMvc.perform( put("/api/v1/customer/" + UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customerDTO)))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException));
     }
 
     @Test

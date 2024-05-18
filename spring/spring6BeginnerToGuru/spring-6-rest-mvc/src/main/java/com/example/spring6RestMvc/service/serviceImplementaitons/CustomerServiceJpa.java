@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
+import com.example.spring6RestMvc.entities.Customer;
 import com.example.spring6RestMvc.mappers.CustomerMapper;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.repositories.CustomerRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Primary
@@ -33,11 +35,24 @@ public class CustomerServiceJpa implements CustomerService {
 
     @Override
     public CustomerDTO save(CustomerDTO customerData) {
-        return null;
+        Customer customer = customerRepository.save(customerMapper.customerDTOToCustomer(customerData));
+        return customerMapper.customerToCustomerDTO(customer);
     }
 
     @Override
-    public void put(UUID customerId, CustomerDTO customer) {
+    public Optional<CustomerDTO> put(UUID customerId, CustomerDTO customer) {
+        AtomicReference<Optional<CustomerDTO>> returnValue = null;
+
+        customerRepository.findById(customerId).ifPresentOrElse(
+                foundCustomer -> {
+                    foundCustomer.setCustomerName(customer.getCustomerName());
+                    returnValue.set(Optional.of(customerMapper.customerToCustomerDTO(customerRepository.save(foundCustomer))));
+                },
+                () -> { returnValue.set(Optional.empty()); }
+        );
+
+        return returnValue.get();
+
 
     }
 
