@@ -142,9 +142,21 @@ public class CustomerControllerTest {
 
     @Test
     public void getCustomerByIdNotFound() throws Exception {
+
         given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/customer/" + UUID.randomUUID())).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCustomerSave() throws Exception {
+        CustomerDTO saveRecord = customerServiceImpl.listAllCustomers().getFirst();
+        given(customerService.save(any(CustomerDTO.class))).willReturn(saveRecord);
+        mockMvc.perform( post("/api/v1/customer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(saveRecord))).andExpect(status().isCreated());
+
     }
 }
 
