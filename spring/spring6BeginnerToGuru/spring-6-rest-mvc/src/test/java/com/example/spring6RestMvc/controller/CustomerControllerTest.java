@@ -23,8 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -141,6 +140,8 @@ public class CustomerControllerTest {
         verify(customerService).delete(uuidArgumentCaptor.capture());
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 
+        verify(customerService).delete(any(UUID.class));
+
     }
 
     @Test
@@ -152,10 +153,6 @@ public class CustomerControllerTest {
 
         mockMvc.perform(delete("/api/v1/customer/" + customer.getId()))
                 .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
-
-
-
-
     }
 
     @Test
@@ -194,6 +191,7 @@ public class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(saveRecord))).andExpect(status().isCreated());
 
     }
+
 }
 
 
