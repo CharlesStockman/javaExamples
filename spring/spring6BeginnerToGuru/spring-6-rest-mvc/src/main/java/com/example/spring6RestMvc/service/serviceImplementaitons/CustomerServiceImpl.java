@@ -67,8 +67,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO delete(UUID uuid) {
-        return customers.remove(uuid);
+    public Boolean delete(UUID uuid) {
+        Boolean found = getCustomerById(uuid).isPresent();
+        if( found ) customers.remove(uuid);
+        return found;
+
     }
 
     @Override

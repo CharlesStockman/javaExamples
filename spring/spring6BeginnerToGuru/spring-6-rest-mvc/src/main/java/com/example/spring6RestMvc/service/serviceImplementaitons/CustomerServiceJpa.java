@@ -1,6 +1,7 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
 import com.example.spring6RestMvc.entities.Customer;
+import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.mappers.CustomerMapper;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.repositories.CustomerRepository;
@@ -57,8 +58,10 @@ public class CustomerServiceJpa implements CustomerService {
     }
 
     @Override
-    public CustomerDTO delete(UUID uuid) {
-        return null;
+    public Boolean delete(UUID uuid) {
+        Boolean found = ( customerRepository.findById(uuid).isEmpty());
+        if ( found ) customerRepository.deleteById(uuid);
+        return found;
     }
 
     @Override

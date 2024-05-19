@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -122,11 +123,16 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerDTO)))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException));
+
+        verify(customerService).put(any(UUID.class), any(CustomerDTO.class));
+
     }
 
     @Test
     public void testDelete() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
+
+        given(customerService.delete(any(UUID.class))).willReturn(Boolean.TRUE);
 
         mockMvc.perform(delete("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -134,6 +140,21 @@ public class CustomerControllerTest {
 
         verify(customerService).delete(uuidArgumentCaptor.capture());
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+
+    }
+
+    @Test
+    public void testDeleteWithInvalidId() throws Exception {
+
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
+
+        given(customerService.delete(any(UUID.class))).willReturn(Boolean.FALSE);
+
+        mockMvc.perform(delete("/api/v1/customer/" + customer.getId()))
+                .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
+
+
+
 
     }
 
