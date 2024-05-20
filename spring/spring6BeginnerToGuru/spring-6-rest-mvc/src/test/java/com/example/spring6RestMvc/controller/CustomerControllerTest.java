@@ -68,13 +68,16 @@ public class CustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(2)));
 
+        verify(customerService).listAllCustomers();
+
+
     }
 
     @Test
     public void testGetCustomerById() throws Exception {
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
-        given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
+        given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.of(customer));
 
         mockMvc.perform(get("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -82,6 +85,10 @@ public class CustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(customer.getId().toString())))
                 .andExpect(jsonPath("$.customerName", is(customer.getCustomerName())));
+
+        verify(customerService).getCustomerById(uuidArgumentCaptor.capture());
+        assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+
     }
 
     @Test
@@ -97,6 +104,10 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("location"));
+
+        verify(customerService).save(customerArgumentCaptor.capture());
+        assertThat(customer).isEqualTo(customerArgumentCaptor.getValue());
+
     }
 
     @Test
@@ -105,27 +116,32 @@ public class CustomerControllerTest {
 
         given(customerService.put(any(UUID.class), any(CustomerDTO.class))).willReturn(Optional.of(customer));
 
-
         mockMvc.perform(put("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).put(any(UUID.class), any(CustomerDTO.class));
+        verify(customerService).put(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+        assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(customer).isEqualTo(customerArgumentCaptor.getValue());
 
     }
 
     @Test
     public void testUpdateCustomerWithInvalidId() throws Exception {
-        CustomerDTO customerDTO = customerServiceImpl.listAllCustomers().getFirst();
-        mockMvc.perform( put("/api/v1/customer/" + UUID.randomUUID())
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
+
+        UUID randomUUID = UUID.randomUUID();
+
+        mockMvc.perform( put("/api/v1/customer/" + randomUUID)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customerDTO)))
+                .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException));
 
-        verify(customerService).put(any(UUID.class), any(CustomerDTO.class));
-
+        verify(customerService).put(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+        assertThat(randomUUID).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(customer).isEqualTo(customerArgumentCaptor.getValue());
     }
 
     @Test
@@ -141,8 +157,6 @@ public class CustomerControllerTest {
         verify(customerService).delete(uuidArgumentCaptor.capture());
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 
-        verify(customerService).delete(any(UUID.class));
-
     }
 
     @Test
@@ -150,12 +164,15 @@ public class CustomerControllerTest {
 
         CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
 
+        UUID randomUUID = UUID.randomUUID();
+
         given(customerService.delete(any(UUID.class))).willReturn(Boolean.FALSE);
 
-        mockMvc.perform(delete("/api/v1/customer/" + customer.getId()))
+        mockMvc.perform(delete("/api/v1/customer/" + randomUUID))
                 .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
 
-        verify(customerService).delete(any(UUID.class));
+        verify(customerService).delete(uuidArgumentCaptor.capture());
+        assertThat(randomUUID).isEqualTo(uuidArgumentCaptor.getValue());
 
     }
 
@@ -205,6 +222,8 @@ public class CustomerControllerTest {
         given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/customer/" + UUID.randomUUID())).andExpect(status().isNotFound());
+
+        verify(customerService).getCustomerById(any(UUID.class));
     }
 
     @Test
@@ -215,6 +234,8 @@ public class CustomerControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(saveRecord))).andExpect(status().isCreated());
+
+        verify(customerService).save(any(CustomerDTO.class));
 
     }
 
