@@ -1,5 +1,6 @@
 package com.example.spring6RestMvc.service.serviceImplementaitons;
 
+import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
 import org.springframework.stereotype.Service;
@@ -75,8 +76,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void patchById(UUID customerId, CustomerDTO customerData) {
+    public Optional<CustomerDTO> patchById(UUID customerId, CustomerDTO customerData) {
+        Boolean found = (getCustomerById(customerId).isPresent()) ? Boolean.TRUE : Boolean.FALSE;
+
         CustomerDTO customer = customers.get(customerId);
         if (StringUtils.hasText(customerData.getCustomerName())) customer.setCustomerName(customerData.getCustomerName());
+
+        return Optional.of(customer);
     }
 }

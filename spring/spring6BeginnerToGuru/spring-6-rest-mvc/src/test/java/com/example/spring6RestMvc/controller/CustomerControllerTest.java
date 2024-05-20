@@ -5,6 +5,7 @@ import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.CustomerServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -153,6 +154,9 @@ public class CustomerControllerTest {
 
         mockMvc.perform(delete("/api/v1/customer/" + customer.getId()))
                 .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
+
+        verify(customerService).delete(any(UUID.class));
+
     }
 
     @Test
@@ -161,6 +165,8 @@ public class CustomerControllerTest {
 
         Map<String, String> customerMap = new HashMap<>();
         customerMap.put("customerName", "New Name");
+
+        given(customerService.patchById(any(UUID.class), any(CustomerDTO.class))).willReturn(Optional.of(customer));
 
         mockMvc.perform( patch( "/api/v1/customer/" + customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -171,6 +177,26 @@ public class CustomerControllerTest {
         verify(customerService).patchById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(customerMap.get("customerName")).isEqualTo(customerArgumentCaptor.getValue().getCustomerName());
+    }
+
+    @Test
+    public void testPatchWithInvalidId() throws Exception {
+        CustomerDTO customer = customerServiceImpl.listAllCustomers().getFirst();
+
+        Map<String, String> customerMap = new HashMap<>();
+        customerMap.put("customerName", "New Name");
+
+        given(customerService.patchById(any(UUID.class), any(CustomerDTO.class))).willReturn(Optional.empty());
+
+        mockMvc.perform( patch( "/api/v1/customer/" + UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerMap)))
+                .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
+
+        verify(customerService).patchById(any(UUID.class), any(CustomerDTO.class));
+
+
     }
 
     @Test

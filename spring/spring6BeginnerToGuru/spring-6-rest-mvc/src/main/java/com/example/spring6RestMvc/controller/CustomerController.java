@@ -56,7 +56,8 @@ public class CustomerController {
 
     @PatchMapping("{customerId}")
     public ResponseEntity<CustomerDTO> patchCustomer(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDTO customerData ) {
-        customerService.patchById(customerId, customerData);
+        Optional<CustomerDTO> customerDTO = customerService.patchById(customerId, customerData);
+        if ( customerDTO.isEmpty()) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -65,7 +65,13 @@ public class CustomerServiceJpa implements CustomerService {
     }
 
     @Override
-    public void patchById(UUID customerId, CustomerDTO customerData) {
+    public Optional<CustomerDTO> patchById(UUID customerId, CustomerDTO customerData) {
+        AtomicReference<Optional<CustomerDTO>> customerReference = new AtomicReference<>();
 
+        customerRepository.findById(customerId).ifPresentOrElse(
+                foundCustomer -> { customerReference.set(Optional.empty()); },
+                () -> { customerReference.set(Optional.empty()); });
+
+        return customerReference.get();
     }
 }
