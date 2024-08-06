@@ -24,6 +24,8 @@ import java.util.List;
 //    High Write Costs: Due to the copy-on-write mechanism, write operations (add, set, remove) can be costly in terms of time and memory.
 //    Inefficient for Write-Heavy Workloads: Not suitable for scenarios with frequent modifications as each write involves copying the entire array.
 //
+// Was not sortable in the past, but is presently
+//
 public class CopyOnWriteArrayListDemo {
     public static void main(String... args) {
         List<String> names = new CopyOnWriteArrayList<>(Arrays.asList("John", "Anton", "Heinz", "John"));

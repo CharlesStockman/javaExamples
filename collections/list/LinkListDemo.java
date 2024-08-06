@@ -3,6 +3,8 @@ package collections.list;
 // More Expensive with Array since each node need two pointer ( previous and next )
 // Expensive when accessing in the middle
 //
+//
+//
 // Where to use:
 //      Graph Adjacency List Representation -- Graphs are often represented using adjacency lists, where each vertex has a list of adjacent vertices. Linked lists can be used to store these lists efficiently.
 //      Browser History Management -- Browsers use linked lists to manage the history of visited pages. Each page visit is a node, and back/forward operations traverse this linked list.

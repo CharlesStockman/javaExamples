@@ -8,9 +8,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Collectors;
 
 /**
- * A TreeSet is sorted and does not have duplicates.
+ * A TreeSet is sorted and does not have duplicates.  It is not Thread safe
  *
- * TreeSet is baded on the Red Black Tree
+ * The elements should all be the same or you could get CloudCast Exceptions
+ *
+ * TreeSet is based on the Red Black Tree
  *    1. adding 0 to 15 values
  *
  *    Lets take 0 which becomes the root
@@ -73,11 +75,5 @@ public class TreeSetDemo {
 
             TreeSet<Integer> experiment1 = new TreeSet<>(IntStream.range(0,1_000_000).boxed().collect(Collectors.toSet()));
             System.out.println("The tree should have 1_000_000 nodes " + experiment1.size());
-
-
-
-
-
-
     }
 }
