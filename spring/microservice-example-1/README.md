@@ -126,7 +126,7 @@ http://localhost:8181/ -- Brings up the administration console
     <li>On the Drop-down select Create Realm to display the Create Realm Page.</li>
     <li>Provide a name in Field "Realm Names and click Create to display Welcome to spring-microservices-security-realm</li>
     <li>Click on Create and click Create Client</li>
-    <li>Provide a Client Id for general settings and for capability config select client authentication on (access through REST)</li>
+    <li>Provide a Client Identification for general settings and for capability config select client authentication on (access through REST)</li>
     <li>Select Authentication Options: Service Account Roles/li>
     <li>click Save</li>
     <li>Click on Client Credentials to get the username and password</li>
@@ -145,16 +145,64 @@ endpoint
 id_token—Information about the user.
 
 ## Test Containers
+
+[Product Website](https://testcontainers.com/)
+
 Testcontainers is an open source framework for providing throwaway, lightweight instances of databases, 
-message brokers, web browsers, or just about anything that can run in a Docker container.
+message brokers, web browsers, or just about anything that can run in a Docker container.  
 
-URL: testcontainers.com
+The documentation states the containers can replace mocks. However, after a few initial integration tests my
+initial observations, the test containers were noticeable slower than mocks.
 
-When creating a spring boot build file using Spring Initializr if you select the testcontainers dependency, then the 
-containers for each component that has them will be added.
+### Installation and Usage
 
-If dependencies testContainers and mongodb the following dependencies add junit jupiter (default 
-adds when any test container is present and mongodb test container
+<b> Add the Dependencies to the POM File (junit-jupiter) and Components (ex. MYSQL or Mongo containers)</b>
+
+``` xml
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <version>1.20.0</version>
+            <scope>test</scope>
+        </dependency>
+```
+
+<b>Configuration for the Test Java to use the Testcontainer</b>
+```java
+
+    // Create the Database URL String
+    @ServiceConnection
+    static MySQLContainer mySqlContainer = new MySQLContainer("mysql:8.3.0")
+        .withUsername("root")
+        .withPassword("mysql")
+        .withDatabaseName("inventory_service");
+
+        @LocalServerPort
+        private Integer port;
+
+        @BeforeEach
+        public void setup() {
+            RestAssured.baseURI = "http://localhost";
+            RestAssured.port = port;
+        }
+
+        static {
+            mySqlContainer.start();
+        }
+    // End create database URL String.
+```
 
 ### Rest Assured
 
@@ -162,7 +210,7 @@ A library used to
 
 Example provides from the website
 
-You can easily use REST Assured to validate interesting things from the response:
+You can use REST Assured to validate interesting things from the response:
 
 @Test public void
 lotto_resource_returns_200_with_expected_id_and_winners() {
@@ -183,7 +231,7 @@ Document the Rest API and to use SWAGGER use Spring Component that uses the Open
 The OpenAPI <b>Specification</b> A specification that describes a REST Service
 Swagger is an implementation of the OpenAPI Specification 
 
-WebSite: openapis.org
+[Product Website:](openapis.org)
 
 <b>Installation and Configuration of swagger</b>
 
@@ -206,10 +254,11 @@ WebSite: openapis.org
 '''
 
 <b>Add properties to the Application Properties File</b>
-| Environment Variable      | Description                                                       | Value            |                                                                                                                                                  
-|---------------------------|-------------------------------------------------------------------|------------------|
-| springdoc.swagger-ui.path | Access Rest Documentation (http://localhost:8081/swagger-ui.html) | /swagger-ui.html |
-| springdoc.api-docs.path   | Access API as JSON (http://localhost:8082/api-docs)               | /api-docs        |
+
+| Environment Variable      | Description               | Value            | URL to view Documentation or JSON       |                                                                                                                                                  
+|---------------------------|---------------------------|------------------|-----------------------------------------|
+| springdoc.swagger-ui.path | Access Rest Documentation | /swagger-ui.html | (http://localhost:8081/swagger-ui.html) |
+| springdoc.api-docs.path   | Access API as JSON        | /api-docs        | (http://localhost:8082/api-docs)        |
 
 
 

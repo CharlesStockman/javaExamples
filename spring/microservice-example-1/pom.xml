@@ -62,6 +62,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Test Containers -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -74,6 +75,14 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <version>1.20.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- End Test Containers
+
         <!-- Flyway Section -->
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -85,12 +94,7 @@
         </dependency>
         <!-- End Flyway Section -->
 
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mysql</artifactId>
-            <version>1.20.0</version>
-            <scope>test</scope>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
