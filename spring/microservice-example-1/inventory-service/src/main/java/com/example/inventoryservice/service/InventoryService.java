@@ -1,17 +1,12 @@
 package com.example.inventoryservice.service;
 
 import com.example.inventoryservice.dto.InventoryResponse;
-import com.example.inventoryservice.model.Inventory;
 import com.example.inventoryservice.repository.InventoryRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -36,10 +31,10 @@ public class InventoryService {
                                                      item, quantity))
                                      .build()).toList().getFirst();
 
-
-
          if ( log.isTraceEnabled()) {
-            log.trace(String.format("Charles Stockman: skuCode = %s and in stock = %b", inventoryResponse.getSkuCode(), inventoryResponse.isInStock() ));
+             log.debug(String.format("Inventory Service: skucode = %s and does it exist -- %b", skuCode, inventoryRepository.existsBySkuCode(skuCode)));
+             log.debug(String.format("Inventory Service: skuCode = %s and the number in the inventory is %d ", skuCode, inventoryRepository.findByQuantityBySkuCode(skuCode)));
+             log.debug(String.format("Inventory Service: skuCode = %s and in stock = %b", inventoryResponse.getSkuCode(), inventoryResponse.isInStock() ));
          }
 
          return inventoryResponse;

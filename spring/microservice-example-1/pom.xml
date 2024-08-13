@@ -81,7 +81,7 @@
             <version>1.20.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- End Test Containers
+        <!-- End Test Containers -->
 
         <!-- Flyway Section -->
         <dependency>

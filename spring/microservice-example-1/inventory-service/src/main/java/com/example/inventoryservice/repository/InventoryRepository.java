@@ -2,16 +2,20 @@ package com.example.inventoryservice.repository;
 
 import com.example.inventoryservice.model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
-    public Optional<Object> findBySkuCode(String skuCode);
-
-    Boolean existsBySkuCode(String skuCode);
 
     Boolean existsBySkuCodeAndQuantityIsGreaterThanEqual(String skuCode, Integer quantity );
 
-    List<Inventory> findBySkuCodeIn(List<String> skuCodes);
+    Boolean existsBySkuCode(String skuCode);
+
+    @Query("SELECT inventory.quantity FROM Inventory inventory WHERE inventory.skuCode = :skuCode")
+    Integer findByQuantityBySkuCode(@Param("skuCode") String skuCode);
+
+
+
+
+
 }
