@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 //
 // Session
 //    For request the session id (JSESSIONID) is part of the cookie
+//    Session Id used to provide context since http is stateless
 //
 // Can get the username/password from the application.properties
 // Postman : Authorization ( Type: Basic Auth )
+//
 @RestController
 public class HelloController {
 
