@@ -4,19 +4,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 
 // Configuration -- Change the way the security filter chain works
 // Crate a Config Class
-// @EnableWebSecurity
-//     1. Enables Spring Security in a Web Application
-//     2. Imports the WebSecurityConfiguration Class
-//     3. What kind of security is being implemented can have Flux and Socket too.
+
+//
+// UsersDetailsService -- Allows customizing of the properties.
+//    It is an interface
 @Configuration
 @Slf4j
 public class SecurityConfig {
@@ -27,12 +33,56 @@ public class SecurityConfig {
     // Warning -- Empty when returning the HttpSecurity.build() without any configuration ( methods called )
     // will make your website unsecure.  You can try it by return httpSecurity.build() as the only line.
     @Bean
+    //@Profile("SecurityFilterChain")
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         SecurityFilterChain chain =  SpringSecurityConfigFactory.selectConfiguration(httpSecurity, configurationName).build();
+        log.error("Charles Stockman : configuration name = {}", configurationName);
         log.error("Charles Stockman : {}", httpSecurity.toString());
-
+        log.error("Charles Stockman : Security Filter Chain is {}", chain.toString());
         return chain;
     }
+
+//    @Bean
+//    //@Profile("Custom")
+//    public UserDetailsService customSecurity() {
+//        UserDetailsService userDetailsService = userDetailsServiceWithKnownClass();
+//        log.error("Charles Stockman : Create an UserDetailsService -- " + userDetailsService.toString());
+//        return userDetailsService;
+//    }
+
+    /**
+     * Developer Configuration using a known Class
+     *
+     * InMemoryUserDetailsManager -- Will contain information about the users (name, password, roles) and when used
+     * it will not use the username/password from the application.properties
+     *
+     * @return Non-persistent implementation of UserDetailsManager which is backed by an in-memory map.
+     *
+     * .withDefaultPasswordEncode -- Encodes password so no one can read it.
+     */
+    @Bean
+    private static UserDetailsService userDetailsServiceWithKnownClass()  {
+        UserDetails user1 = User
+                .withDefaultPasswordEncoder()
+                .username("chuck.stockman")
+                .password("password")
+                .roles("USER")
+                .build();
+
+        UserDetails user2 = User
+                .withDefaultPasswordEncoder()
+                .username("harsh")
+                .password("password")
+                .roles("ADMIN")
+                .build();
+
+        // Implements UserDetailsService
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager(user1, user2);
+
+        return manager;
+    }
+
+
 }
 
 @Slf4j
@@ -123,4 +173,9 @@ class SpringSecurityConfigFactory {
 
         return httpSecurity;
     }
+
+
+
+
+
 }

@@ -12,7 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 //		This generated password is for development use only. Your security configuration must be updated before running your application in production.
 // Opens the new tab then it automatically goes to the application skipping the login page (Session Management)
 // Can do a logout: URL is http://<ip address>:<port>/logout -- Will take you to a form that will ask if you want to log out.
-
+// @EnableWebSecurity
+//     1. Enables Spring Security in a Web Application
+//     2. Imports the WebSecurityConfiguration Class
+//     3. What kind of security is being implemented can have Flux and Socket too.
 @SpringBootApplication
 @EnableWebSecurity
 public class SpringSecurityApplication {
