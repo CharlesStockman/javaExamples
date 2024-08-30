@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -54,7 +53,6 @@ class SpringSecurityConfigFactory {
             case "absoluteAccess"   -> SpringSecurityConfigFactory.absoluteAccess(httpSecurity);
             case "firstTry"         -> SpringSecurityConfigFactory.firstTry(httpSecurity);
             case "secondTry"        -> SpringSecurityConfigFactory.secondTry(httpSecurity);
-            case "thirdTry"         -> SpringSecurityConfigFactory.thirdTry(httpSecurity);
             default -> throw new IllegalArgumentException("Invalid value for \"app.security.configuration.name\" -- " + configurationKey);
         };
 
