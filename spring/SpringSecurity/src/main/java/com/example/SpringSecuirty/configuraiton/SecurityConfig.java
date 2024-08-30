@@ -42,14 +42,6 @@ public class SecurityConfig {
         return chain;
     }
 
-//    @Bean
-//    //@Profile("Custom")
-//    public UserDetailsService customSecurity() {
-//        UserDetailsService userDetailsService = userDetailsServiceWithKnownClass();
-//        log.error("Charles Stockman : Create an UserDetailsService -- " + userDetailsService.toString());
-//        return userDetailsService;
-//    }
-
     /**
      * Developer Configuration using a known Class
      *
@@ -61,6 +53,7 @@ public class SecurityConfig {
      * .withDefaultPasswordEncode -- Encodes password so no one can read it.
      */
     @Bean
+    @Profile("DataInMemory")
     private static UserDetailsService userDetailsServiceWithKnownClass()  {
         UserDetails user1 = User
                 .withDefaultPasswordEncoder()

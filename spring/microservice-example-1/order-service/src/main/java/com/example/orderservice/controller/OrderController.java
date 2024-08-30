@@ -17,11 +17,30 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String placeOrder(@RequestBody OrderRequestDto orderRequestDto) {
-        log.trace("Entering order-service with orderRequest " + orderRequestDto.toString());
+    public String receivedOrderRequest(@RequestBody OrderRequestDto orderRequestDto) {
         orderService.placeOrder(orderRequestDto);
         log.trace("Order has been successfully ordered.");
         return "Order Placed Successfully";
     }
+
+    private void logOrder(OrderRequestDto orderRequestDto) {
+        if ( log.isInfoEnabled()) {
+            log.debug(String.format("Received a request with size %d and the first skuCode is %s",
+                    orderRequestDto.getOrderLineItemsDtoList().size(),
+                    orderRequestDto.getOrderLineItemsDtoList().getFirst().getSkuCode()));
+        } else {
+            log.debug(String.format("Recevied a request with size %d and the skuCode(s) are %s",
+                    orderRequestDto.getOrderLineItemsDtoList().size());
+            orderRequestDto.getOrderLineItemsDtoList().stream().collect())
+        }
+
+        orderRequestDto.getOrderLineItemsDtoList().stream().limit(3).forEach( (OrderRequestDto item -> {
+            System.out.println(item.toString());
+        });
+    }
+
+
+
+
 
 }
