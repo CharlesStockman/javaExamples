@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,7 +24,11 @@ import org.springframework.security.web.SecurityFilterChain;
 
 //
 // UsersDetailsService -- Allows customizing of the properties.
-//    It is an interface
+//    It is an interface an exmaple implementation would be org.springframework.security.core.userdetails
+//
+// AuthenticatedProvider is an interface with an example implementation of DaoAuthenticationProvider
+// Flow of Authentication Object Authenticated Object (Not Authenticated)
+//      passed into Authenticated Provider to create an Authenticated Object (Authenticated)
 @Configuration
 @Slf4j
 public class SecurityConfig {
@@ -45,8 +51,10 @@ public class SecurityConfig {
     /**
      * Developer Configuration using a known Class
      *
-     * InMemoryUserDetailsManager -- Will contain information about the users (name, password, roles) and when used
-     * it will not use the username/password from the application.properties
+     * InMemoryUserDetailsManager -- Will contain information about the users (name, password, roles), and when used
+     * it will not use the username/password from the application.properties.
+     *
+     * The Reason it does this is that we are using our own UserDetailsService and not DefaultServer
      *
      * @return Non-persistent implementation of UserDetailsManager which is backed by an in-memory map.
      *
@@ -74,6 +82,16 @@ public class SecurityConfig {
 
         return manager;
     }
+
+
+    @Bean
+    @Profile("DataInDatabase")
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        return provider;
+    }
+
+
 
 
 }
@@ -166,6 +184,8 @@ class SpringSecurityConfigFactory {
 
         return httpSecurity;
     }
+
+
 
 
 

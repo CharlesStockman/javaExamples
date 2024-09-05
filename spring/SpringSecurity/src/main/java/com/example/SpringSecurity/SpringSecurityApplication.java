@@ -16,6 +16,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 //     1. Enables Spring Security in a Web Application
 //     2. Imports the WebSecurityConfiguration Class
 //     3. What kind of security is being implemented can have Flux and Socket too.
+//
+// An Authentication will be passed to an AuthenticatedProvider to get Authenticated (AuthenticatedObject).  To
+// use a database for the UserData a Custom AuthenticatedProvider must be created.
 @SpringBootApplication
 @EnableWebSecurity
 public class SpringSecurityApplication {
