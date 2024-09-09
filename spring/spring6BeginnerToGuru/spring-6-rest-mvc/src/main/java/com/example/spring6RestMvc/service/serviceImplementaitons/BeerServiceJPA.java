@@ -5,7 +5,9 @@ import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.repositories.BeerRepository;
 import com.example.spring6RestMvc.service.BeerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @Primary
 @AllArgsConstructor
+@Profile("inDatabase")
+@Slf4j
 public class BeerServiceJPA implements BeerService {
 
     private final BeerRepository beerRepository;
@@ -40,7 +44,7 @@ public class BeerServiceJPA implements BeerService {
     @Override
     public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beerDTO) {
 
-        // Can not do any updates outside the lambda function
+        // Cannot do any updates outside the lambda function
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(

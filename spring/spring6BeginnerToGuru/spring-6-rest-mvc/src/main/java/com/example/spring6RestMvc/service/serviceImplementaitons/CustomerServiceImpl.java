@@ -3,6 +3,7 @@ package com.example.spring6RestMvc.service.serviceImplementaitons;
 import com.example.spring6RestMvc.exception.NotFoundException;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Profile("inMemory")
 public class CustomerServiceImpl implements CustomerService {
 
     private final Map<UUID, CustomerDTO> customers;

@@ -4,6 +4,7 @@ import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.model.BeerStyle;
 import com.example.spring6RestMvc.service.BeerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +14,7 @@ import java.util.*;
 
 @Slf4j
 @Service
+@Profile("InMemory")
 public class BeerServiceImpl implements BeerService {
     private final Map<UUID, BeerDTO> beerMap;
 
@@ -72,7 +74,6 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
         BeerDTO beer = beerMap.get(id);
-        //log.debug("getBeerByID for id:{}, beer:{}", id, beer.getBeerName());
         return Optional.of(beer);
     }
 

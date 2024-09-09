@@ -77,7 +77,7 @@ public class BootstrapData implements CommandLineRunner {
                 .build();
 
         Customer customer2 = Customer.builder()
-                .customerName("Charlie Stockman")
+                .customerName("Sharon Stockman")
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .build();

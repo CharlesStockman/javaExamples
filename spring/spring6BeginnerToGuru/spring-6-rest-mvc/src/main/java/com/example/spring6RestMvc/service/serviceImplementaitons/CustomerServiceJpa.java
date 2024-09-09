@@ -8,6 +8,7 @@ import com.example.spring6RestMvc.repositories.CustomerRepository;
 import com.example.spring6RestMvc.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @Primary
 @AllArgsConstructor
+@Profile("inDatabase")
 public class CustomerServiceJpa implements CustomerService {
 
     private CustomerRepository customerRepository;
@@ -42,7 +44,7 @@ public class CustomerServiceJpa implements CustomerService {
 
     @Override
     public Optional<CustomerDTO> put(UUID customerId, CustomerDTO customer) {
-        AtomicReference<Optional<CustomerDTO>> returnValue = null;
+        AtomicReference<Optional<CustomerDTO>> returnValue = new AtomicReference<>();
 
         customerRepository.findById(customerId).ifPresentOrElse(
                 foundCustomer -> {
@@ -59,7 +61,7 @@ public class CustomerServiceJpa implements CustomerService {
 
     @Override
     public Boolean delete(UUID uuid) {
-        Boolean found = ( customerRepository.findById(uuid).isEmpty());
+        Boolean found = ( customerRepository.findById(uuid).isPresent());
         if ( found ) customerRepository.deleteById(uuid);
         return found;
     }
@@ -69,7 +71,11 @@ public class CustomerServiceJpa implements CustomerService {
         AtomicReference<Optional<CustomerDTO>> customerReference = new AtomicReference<>();
 
         customerRepository.findById(customerId).ifPresentOrElse(
-                foundCustomer -> { customerReference.set(Optional.empty()); },
+                foundCustomer -> {
+                    if ( foundCustomer.getCustomerName().compareTo(customerData.getCustomerName()) == 0)
+                        customerData.setCustomerName(foundCustomer.getCustomerName());
+                    customerReference.set(Optional.of(customerData));
+                },
                 () -> { customerReference.set(Optional.empty()); });
 
         return customerReference.get();

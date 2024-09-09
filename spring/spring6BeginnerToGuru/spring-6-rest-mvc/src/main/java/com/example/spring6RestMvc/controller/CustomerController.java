@@ -21,6 +21,7 @@ import java.util.UUID;
 public class CustomerController {
     private final CustomerService customerService;
 
+
     @GetMapping
     public List<CustomerDTO> listAllCustomers() {
         return customerService.listAllCustomers();
