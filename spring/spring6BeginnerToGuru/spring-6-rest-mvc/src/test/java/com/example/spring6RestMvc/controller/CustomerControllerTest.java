@@ -2,6 +2,7 @@ package com.example.spring6RestMvc.controller;
 
 
 import com.example.spring6RestMvc.exception.NotFoundException;
+import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.model.CustomerDTO;
 import com.example.spring6RestMvc.service.CustomerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.CustomerServiceImpl;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -236,6 +239,71 @@ public class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(saveRecord))).andExpect(status().isCreated());
 
         verify(customerService).save(any(CustomerDTO.class));
+
+    }
+
+    @Test
+    void testCreateCustomerNullBeerName() throws Exception {
+        CustomerDTO customerDTO = CustomerDTO.builder().build();
+
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerServiceImpl.listAllCustomers().getFirst());
+
+        mockMvc.perform(post("/api/v1/customer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateCustomerWhiteSpaceSpaceBeerName() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().build();
+        beerDTO.setBeerName("   ");
+
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerServiceImpl.listAllCustomers().getFirst());
+
+        mockMvc.perform(post("/api/v1/customer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateCustomerEmptyBeerName() throws Exception {
+        CustomerDTO customerDTO = CustomerDTO.builder().build();
+        customerDTO.setCustomerName("");
+
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerServiceImpl.listAllCustomers().getFirst());
+
+        mockMvc.perform(post("/api/v1/customer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void showMockResult() throws Exception {
+        CustomerDTO customerDTO = CustomerDTO.builder().build();
+        customerDTO.setCustomerName("");
+
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerServiceImpl.listAllCustomers().getFirst());
+
+        MvcResult result = mockMvc.perform(post("/api/v1/customer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+
+        System.out.println(result.toString());
+        System.out.println(result.getResponse().getContentAsString());
 
     }
 

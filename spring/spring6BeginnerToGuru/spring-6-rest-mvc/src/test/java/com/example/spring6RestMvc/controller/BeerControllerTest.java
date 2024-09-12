@@ -30,8 +30,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // A test splice limited to the BeerController classed instead of all classes
@@ -197,5 +199,51 @@ class BeerControllerTest {
         .andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreateBeerNullBeerName() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().build();
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        mockMvc.perform(post("/api/v1/beer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(beerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateBeerWhiteSpaceBeerName() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().build();
+        beerDTO.setBeerName("   ");
+
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        mockMvc.perform(post("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateBeerEmptyBeerName() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().build();
+        beerDTO.setBeerName("");
+
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        mockMvc.perform(post("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
