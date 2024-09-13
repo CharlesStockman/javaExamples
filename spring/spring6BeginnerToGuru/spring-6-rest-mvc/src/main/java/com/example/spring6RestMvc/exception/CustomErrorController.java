@@ -30,9 +30,6 @@ public class CustomErrorController {
             return errorMap;
         }).toList();
 
-        log.error("Charles Stockman " + errorList.toString());
-        log.error("Charles Stockman " + errorList.size());
-
         return ResponseEntity.badRequest().body(errorList);
 
     }

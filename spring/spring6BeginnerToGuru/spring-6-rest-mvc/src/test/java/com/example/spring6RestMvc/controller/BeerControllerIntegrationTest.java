@@ -187,4 +187,17 @@ class BeerControllerIntegrationTest {
         assertThat(actualBeer).isEqualTo(expectedBeer);
 
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testUpdateWithConstraintNameNotNull() {
+        BeerDTO beerDTO = SerializationUtils.clone(beerController.listBeers().getFirst());
+        beerDTO.setBeerName(null);
+
+        beerController.updateById(beerDTO.getId(), beerDTO);
+
+
+    }
+
 }

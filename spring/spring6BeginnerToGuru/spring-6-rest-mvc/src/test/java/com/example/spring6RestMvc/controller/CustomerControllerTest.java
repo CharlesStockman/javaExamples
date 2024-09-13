@@ -307,6 +307,35 @@ public class CustomerControllerTest {
 
     }
 
+    @Test
+    public void testConstraintRequiredCustomerName() throws Exception {
+        CustomerDTO customerDTO = CustomerDTO.builder().build();
+
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerServiceImpl.listAllCustomers().getFirst());
+
+        mockMvc.perform(post("/api/v1/customer")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(customerDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testConstraintRequiredNonBlankCustomerName() throws Exception {
+        CustomerDTO customerDTO = customerServiceImpl.listAllCustomers().getFirst();
+        customerDTO.setCustomerName("");
+
+        given(customerService.save(any(CustomerDTO.class))).willReturn(customerDTO);
+
+        mockMvc.perform(post("/api/v1/customer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)));
+    }
+
 }
 
 

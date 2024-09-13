@@ -42,21 +42,21 @@ public class BeerController {
     }
 
     @PutMapping("{beerId}")
-    public ResponseEntity<BeerDTO> updateById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer ) {
+    public ResponseEntity<BeerDTO> updateById(@Validated @PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer ) {
         Optional<BeerDTO> returnedBeer = beerService.updateBeerById(beerId, beer);
         if ( returnedBeer.isEmpty()) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{beerId}")
-    public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId) {
+    public ResponseEntity deleteById(@Validated @PathVariable("beerId") UUID beerId) {
         boolean result = beerService.deleteById(beerId);
         if ( !result ) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("{beerId}")
-    public ResponseEntity<BeerDTO> patchById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beerData ) {
+    public ResponseEntity<BeerDTO> patchById(@Validated @PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beerData ) {
         Optional<BeerDTO> beerDTO = beerService.patchById(beerId, beerData);
         if ( beerDTO.isEmpty() ) throw new NotFoundException();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

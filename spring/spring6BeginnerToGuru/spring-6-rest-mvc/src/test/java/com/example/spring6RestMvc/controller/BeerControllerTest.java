@@ -1,9 +1,11 @@
 package com.example.spring6RestMvc.controller;
 
 import com.example.spring6RestMvc.model.BeerDTO;
+import com.example.spring6RestMvc.model.BeerStyle;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,9 +20,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.SerializationUtils;
 
+import javax.print.attribute.standard.Media;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // A test splice limited to the BeerController classed instead of all classes
 // Allows management of this class only
 @WebMvcTest(BeerController.class)
+@Slf4j
 class BeerControllerTest {
 
     @Autowired
@@ -195,7 +200,7 @@ class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerDTO)))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.length()",is(2)))
+            .andExpect(jsonPath("$.length()",is(6)))
         .andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());
@@ -246,4 +251,82 @@ class BeerControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void testConstrainEmptyBeerStyle() throws  Exception {
+        BeerDTO beerDTO = BeerDTO.builder().beerName("Test 1").upc("test 1").price(new BigDecimal("50.2")).build();
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn((beerServiceImpl.listBeers().getFirst()));
+
+        mockMvc.perform(post("/api/v1/beer")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testConstraintEmptyUPC() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().beerName("Test 1").beerStyle(BeerStyle.ALE).price(new BigDecimal("50.2")).build();
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn((beerServiceImpl.listBeers().getFirst()));
+
+        mockMvc.perform(post("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testConstraintEmptyPrice() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().beerName("Test 1").beerStyle(BeerStyle.ALE).upc("test1").build();
+        //beerDTO.setBeerName(null);
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn((beerServiceImpl.listBeers().getFirst()));
+
+        mockMvc.perform(post("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(("$.length()"),is(1)));
+    }
+
+    @Test
+    void testConstraintUPCIsBlank() throws Exception {
+        BeerDTO beerDTO = beerServiceImpl.listBeers().getFirst();
+        beerDTO.setUpc("");
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn((beerServiceImpl.listBeers().getFirst()));
+
+        log.error("The beer is " + beerDTO.toString());
+        log.error("The beer is " + objectMapper.writeValueAsString(beerDTO));
+
+        mockMvc.perform(post("/api/v1/beer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    void testConstraintUPCIsWhiteSpace() throws Exception {
+        BeerDTO beerDTO = beerServiceImpl.listBeers().getFirst();
+        beerDTO.setUpc("    ");
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn((beerServiceImpl.listBeers().getFirst()));
+
+        mockMvc.perform(post("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+
+
 }
