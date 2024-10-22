@@ -1,8 +1,10 @@
 package com.example.spring6RestMvc.model;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
@@ -22,6 +24,8 @@ public class BeerDTO implements Serializable {
 
     @NotNull
     @NotBlank
+    @Size(max=30)
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private String beerName;
 
     @NotNull

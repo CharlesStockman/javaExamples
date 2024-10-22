@@ -18,6 +18,8 @@ public class CustomerRepositoryTest {
                 .customerName("Chuck")
                 .build());
 
+        customerRepository.flush();
+
         Assertions.assertNotNull(customer);
         Assertions.assertNotNull(customer.getId());
     }

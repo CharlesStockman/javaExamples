@@ -1,6 +1,8 @@
 package com.example.spring6RestMvc.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,5 +31,7 @@ public class Customer {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
+    @NotNull
+    @NotBlank
     private String customerName;
 }

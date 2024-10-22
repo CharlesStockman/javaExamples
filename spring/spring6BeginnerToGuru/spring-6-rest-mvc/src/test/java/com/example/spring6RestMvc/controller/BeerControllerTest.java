@@ -1,10 +1,13 @@
 package com.example.spring6RestMvc.controller;
 
+import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.model.BeerStyle;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,12 +16,15 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.SerializationUtils;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.print.attribute.standard.Media;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +38,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -64,6 +71,11 @@ class BeerControllerTest {
 
     @Captor
     ArgumentCaptor<BeerDTO> beerArgumentCaptor;
+
+
+
+
+
     @BeforeEach
     void setUp() {
         beerServiceImpl = new BeerServiceImpl();

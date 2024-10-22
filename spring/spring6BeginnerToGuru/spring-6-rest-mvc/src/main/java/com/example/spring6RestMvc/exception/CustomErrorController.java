@@ -1,7 +1,10 @@
 package com.example.spring6RestMvc.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.Repository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +16,27 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class CustomErrorController {
+
+    @ExceptionHandler
+    ResponseEntity handleJPViolations(TransactionSystemException exception) {
+        ResponseEntity.BodyBuilder responseEntity = ResponseEntity.badRequest();
+
+        if ( exception.getCause().getCause() instanceof ConstraintViolationException ) {
+            ConstraintViolationException constraintViolationException =
+                    (ConstraintViolationException) exception.getCause().getCause();
+            List errors = constraintViolationException.getConstraintViolations().stream()
+                    .map( constraintViolation -> {
+                        Map<String, String> errorMap = new HashMap<>();
+                        errorMap.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+                        return errorMap;
+                    }).toList();
+            return responseEntity.body(errors);
+        }
+
+        return ResponseEntity.badRequest().build();
+
+    }
+
     /**
      * An example of a customer error body
      *
