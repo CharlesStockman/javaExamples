@@ -1,7 +1,6 @@
 package com.example.spring6RestMvc.bootstrap.Bootstrap;
 
 import com.example.spring6RestMvc.repositories.BeerRepository;
-import com.example.spring6RestMvc.repositories.CustomerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,22 +11,18 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 public class BootstrapDataTest {
 
     @Autowired
-    BeerRepository beerRepository;
-
-    @Autowired
-    CustomerRepository customerRepository;
+    BeerRepository beerRepository = null;
 
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp() {
-        bootstrapData = new BootstrapData(beerRepository, customerRepository);
+        bootstrapData = new BootstrapData(beerRepository);
     }
 
     @Test
     void TestRun() throws Exception {
         bootstrapData.run((String) null);
         Assertions.assertEquals(3, beerRepository.count());
-        Assertions.assertEquals(2, customerRepository.count());
     }
 }

@@ -72,10 +72,6 @@ class BeerControllerTest {
     @Captor
     ArgumentCaptor<BeerDTO> beerArgumentCaptor;
 
-
-
-
-
     @BeforeEach
     void setUp() {
         beerServiceImpl = new BeerServiceImpl();
