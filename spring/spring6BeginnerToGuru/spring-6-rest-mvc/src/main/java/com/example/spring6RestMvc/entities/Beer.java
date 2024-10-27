@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -46,7 +45,7 @@ public class Beer {
 
     @NotNull
     @NotBlank
-    @Column(length=36, columnDefinition = "varchar", updatable=true, nullable = false)
+    @Column(length=36, columnDefinition = "varchar", nullable = false)
     private String upc;
     private Integer quantityOnHand;
 

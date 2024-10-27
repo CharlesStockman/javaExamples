@@ -1,6 +1,5 @@
 package com.example.spring6RestMvc.model;
 
-import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

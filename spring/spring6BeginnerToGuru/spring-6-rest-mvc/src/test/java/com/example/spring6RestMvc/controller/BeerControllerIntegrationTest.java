@@ -9,13 +9,8 @@ import com.example.spring6RestMvc.repositories.BeerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,30 +19,21 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.SerializationUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -85,13 +71,13 @@ class BeerControllerIntegrationTest {
         // Show the current implementation the BeerService is using.
         Field serviceField = beerController.getClass().getDeclaredField("beerService");
         serviceField.setAccessible(true);
-        log.error("Charles Stockman: The Service class being used is  " + serviceField.get(beerController).getClass().getCanonicalName());
+        log.error("Charles Stockman: The Service class being used is  {}", serviceField.get(beerController).getClass().getCanonicalName());
     }
 
     @Test
     void testListBeers() {
         List<BeerDTO> dtos = beerController.listBeers();
-        log.error("The Beers are: " + dtos.toString());
+        log.error("The Beers are: {}", dtos.toString());
         assertThat(dtos.size()).isEqualTo(3);
     }
 
@@ -192,8 +178,6 @@ class BeerControllerIntegrationTest {
         expectedBeer.setPrice(new BigDecimal(333));
         expectedBeer.setQuantityOnHand(333);
 
-        log.debug("Expected Beer = " + expectedBeer.toString());
-
         beerController.patchById(expectedBeer.getId(), expectedBeer);
         BeerDTO actualBeer = beerController.getBeerById(expectedBeer.getId());
         assertThat(actualBeer).isEqualTo(expectedBeer);
@@ -207,8 +191,6 @@ class BeerControllerIntegrationTest {
 
         // Expected Beer
         BeerDTO expectedBeer = SerializationUtils.clone(beerController.listBeers().getFirst());
-
-        log.debug("Expected Beer = " + expectedBeer.toString());
 
         beerController.patchById(expectedBeer.getId(), expectedBeer);
         BeerDTO actualBeer = beerController.getBeerById(expectedBeer.getId());

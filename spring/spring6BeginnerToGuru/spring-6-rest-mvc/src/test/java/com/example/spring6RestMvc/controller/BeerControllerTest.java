@@ -1,13 +1,10 @@
 package com.example.spring6RestMvc.controller;
 
-import com.example.spring6RestMvc.entities.Beer;
 import com.example.spring6RestMvc.model.BeerDTO;
 import com.example.spring6RestMvc.model.BeerStyle;
 import com.example.spring6RestMvc.service.BeerService;
 import com.example.spring6RestMvc.service.serviceImplementaitons.BeerServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,20 +13,10 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.SerializationUtils;
-import org.springframework.web.context.WebApplicationContext;
 
-import javax.print.attribute.standard.Media;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +25,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -56,11 +41,11 @@ class BeerControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    // Asking SpringBootContext to bring in the AutoMapper ( configured with sensible defaults)
+    // Asking SpringBootContext to bring in the AutoMapper (configured with sensible defaults)
     @Autowired
     ObjectMapper objectMapper;
 
-    // Provide a mock of the BeerService.  provides back a null response by default.
+    // Provide the mock of the BeerService.  Provides back a null response by default.
     @MockBean
     BeerService beerService;
 
@@ -109,7 +94,7 @@ class BeerControllerTest {
     @Test
     void testCreateNewBeer() throws Exception {
 
-        // Object Mapper -- Serialize and Deseialize from JSON to POJO
+        // Object Mapper -- Serialize and Deserialize from JSON to POJO
         // Jackson has modules and findAndRegisterModules -- tell jackson to look on the classpath for modules
         // have function writeValueAsString
         objectMapper.findAndRegisterModules();
@@ -121,8 +106,7 @@ class BeerControllerTest {
         // Returning the second object so that we have a completed object being returned.
         given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post("/api/v1/beer")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beer)))
@@ -142,7 +126,7 @@ class BeerControllerTest {
                 .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isNoContent());
 
-        // Verify the object and method has been called.
+        // Verify the object and method have been called.
         verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
 
     }
@@ -161,7 +145,7 @@ class BeerControllerTest {
 
         ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);
 
-        // Verify the object and method has been called.
+        // Verify the object and method have been called.
         verify(beerService).deleteById(uuidArgumentCaptor.capture());
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
@@ -309,8 +293,8 @@ class BeerControllerTest {
 
         given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn((beerServiceImpl.listBeers().getFirst()));
 
-        log.error("The beer is " + beerDTO.toString());
-        log.error("The beer is " + objectMapper.writeValueAsString(beerDTO));
+        log.error("The beer is {}", beerDTO);
+        log.error("The beer is {}", objectMapper.writeValueAsString(beerDTO));
 
         mockMvc.perform(post("/api/v1/beer")
                 .accept(MediaType.APPLICATION_JSON)

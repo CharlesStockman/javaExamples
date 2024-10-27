@@ -18,16 +18,14 @@ public class BootstrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
 
-    private final String ALREADY_INITIALIZED_MESSAGE = "Database already initialized";
-
     @Override
     public void run(String... args) throws Exception {
         loadBeerData();
     }
 
     private void loadBeerData() throws Exception {
-            if ( beerRepository.count() > 0 )
-                throw new Exception(ALREADY_INITIALIZED_MESSAGE);
+        if ( beerRepository.count() > 0 )
+                throw new Exception("Database already initialized");
 
             Beer beer1 = Beer.builder()
                     .beerName("Galaxy Cat")
