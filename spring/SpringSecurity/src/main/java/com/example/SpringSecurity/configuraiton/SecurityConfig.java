@@ -1,4 +1,4 @@
-package com.example.SpringSecuirty.configuraiton;
+package com.example.SpringSecurity.configuraiton;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -84,10 +84,19 @@ public class SecurityConfig {
     }
 
 
+    /**
+     *
+     * Line 1: Creating an instance of an AuthenticationProvider
+     * Line 2: Set the password encoder (not using one)
+     * Line 3:
+     * @return
+     */
     @Bean
     @Profile("DataInDatabase")
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setUserDetailsService();
         return provider;
     }
 

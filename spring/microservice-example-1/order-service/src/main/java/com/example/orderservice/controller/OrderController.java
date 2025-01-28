@@ -28,13 +28,13 @@ public class OrderController {
             log.debug(String.format("Received a request with size %d and the first skuCode is %s",
                     orderRequestDto.getOrderLineItemsDtoList().size(),
                     orderRequestDto.getOrderLineItemsDtoList().getFirst().getSkuCode()));
-        } else {
-            log.debug(String.format("Recevied a request with size %d and the skuCode(s) are %s",
-                    orderRequestDto.getOrderLineItemsDtoList().size());
-            orderRequestDto.getOrderLineItemsDtoList().stream().collect())
+        } else if ( log.isDebugEnabled()) {
+            log.debug(String.format("Received a request with size %d and the skuCode(s) are %s",
+                    orderRequestDto.getOrderLineItemsDtoList().size()),
+                    orderRequestDto.getOrderLineItemsDtoList().stream().toString());
         }
 
-        orderRequestDto.getOrderLineItemsDtoList().stream().limit(3).forEach( (OrderRequestDto item -> {
+        orderRequestDto.getOrderLineItemsDtoList().stream().limit(3).forEach( item -> {
             System.out.println(item.toString());
         });
     }

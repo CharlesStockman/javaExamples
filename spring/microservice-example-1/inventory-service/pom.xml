@@ -13,9 +13,9 @@
         <maven.compiler.target>22</maven.compiler.target>
     </properties>
 
-    <artifactId>invetory-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>inventory-service</artifactId>
     <name>inventory-service</name>
+    <version>0.0.1-SNAPSHOT</version>
     <description>inventory-service</description>
 
     <dependencies>

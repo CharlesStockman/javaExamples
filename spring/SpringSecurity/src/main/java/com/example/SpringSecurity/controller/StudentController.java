@@ -1,6 +1,6 @@
-package com.example.SpringSecuirty.controller;
+package com.example.SpringSecurity.controller;
 
-import com.example.SpringSecuirty.dto.Student;
+import com.example.SpringSecurity.dto.Student;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
