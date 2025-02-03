@@ -5,6 +5,8 @@ import com.example.mockito.util.implementations.PersonRepository;
 import com.example.mockito.util.implementations.TranslationService;
 import com.example.mockito.util.pojo.Person;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Optional;
 
 public class HelloMockito {
@@ -32,7 +34,7 @@ public class HelloMockito {
 	 */
 	public static void main(String... args) throws Exception {
 
-		Person person = new Person("Charles" , "Stockman");
+		Person person = new Person(1, "Charles" , "Stockman", LocalDate.of(1966, Month.DECEMBER, 3));
 		System.out.println("Created a person " + person);
 
 		// Create the Dependencies
