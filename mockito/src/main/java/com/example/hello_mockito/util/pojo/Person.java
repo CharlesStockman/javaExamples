@@ -1,4 +1,4 @@
-package com.example.mockito.util.pojo;
+package com.example.hello_mockito.util.pojo;
 
 import lombok.Value;
 

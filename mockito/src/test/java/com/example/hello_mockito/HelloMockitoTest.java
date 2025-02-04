@@ -1,8 +1,8 @@
-package com.example.mockito;
+package com.example.hello_mockito;
 
-import com.example.mockito.util.implementations.PersonRepository;
-import com.example.mockito.util.implementations.TranslationService;
-import com.example.mockito.util.pojo.Person;
+import com.example.hello_mockito.util.implementations.PersonRepository;
+import com.example.hello_mockito.util.implementations.TranslationService;
+import com.example.hello_mockito.util.pojo.Person;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

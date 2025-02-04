@@ -1,7 +1,7 @@
-package com.example.mockito.util.implementations;
+package com.example.hello_mockito.util.implementations;
 
-import com.example.mockito.util.PersonRepositoryInterface;
-import com.example.mockito.util.pojo.Person;
+import com.example.hello_mockito.util.PersonRepositoryInterface;
+import com.example.hello_mockito.util.pojo.Person;
 import lombok.Data;
 
 import java.util.HashMap;
