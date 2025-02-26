@@ -2,8 +2,9 @@ package com.example.springAop.model;
 
 
 import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class EmployeeHours {
 
     String functionName;
