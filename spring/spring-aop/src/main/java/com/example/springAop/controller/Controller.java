@@ -22,6 +22,7 @@ public class Controller {
         List<EmployeeHours> employee = new ArrayList<>();
         employee = service.service(employee);
 
+        System.out.printf(EmployeeHours.getFormatString(), "Method Name", "Name", "Arrived", "Hours", "Approved");
         for ( EmployeeHours item : employee) {
             item.displayData();
         }
